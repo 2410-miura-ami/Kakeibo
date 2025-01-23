@@ -13,7 +13,7 @@ public class SmallCategory {
 
     private String name;
 
-    private int big_category_id;
+    private int bigCategoryId;
 
     private int bop;
 
