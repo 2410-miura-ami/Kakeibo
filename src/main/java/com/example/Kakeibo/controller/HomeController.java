@@ -22,6 +22,8 @@ public class HomeController {
     @Autowired
     RecordService recordService;
 
+    public static Date displayDate = new Date();
+
     @GetMapping
     public ModelAndView top() {
         ModelAndView mav = new ModelAndView();
@@ -31,7 +33,7 @@ public class HomeController {
         mav.addObject("loginUser", loginUser);
 
         //デフォルト表示月
-        Date displayDate = new Date();
+        //Date displayDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
         Date firstDate = getFirstDate(displayDate);
         Date lastDate = getLastDate(displayDate);

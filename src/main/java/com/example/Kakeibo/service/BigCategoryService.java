@@ -41,7 +41,6 @@ public class BigCategoryService {
             recordBigCategoryForm.setName(name);
             recordBigCategoryForm.setTotalAmount(totalAmount);
             recordBigCategoryForm.setBigCategoryId(bigCategoryId);
-            //BeanUtils.copyProperties(result, recordBigCategoryForm);
             recordBigCategoryForms.add(recordBigCategoryForm);
         }
         return recordBigCategoryForms;
@@ -69,6 +68,16 @@ public class BigCategoryService {
             recordBopForms.add(recordBopForm);
         }
         return recordBopForms;
+    }
+
+    /*
+     * 家計簿（小）画面で表示する大カテゴリの金額（大カテゴリ名・金額総額）を取得
+     */
+    public List<RecordBigCategoryForm> findByBigCategory(int userId, Date startDate, Date endDate, int bigCategoryId) {
+        List<Object[]> results = bigCategoryRepository.findAmountByBigCategory(userId, startDate, endDate, bigCategoryId);
+
+        List<RecordBigCategoryForm> recordBigCategoryForms = setRecordBigCategoryForm(results);
+        return recordBigCategoryForms;
     }
 
 
