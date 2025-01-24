@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class Record {
+public class RecordForm {
 
     private int id;
 

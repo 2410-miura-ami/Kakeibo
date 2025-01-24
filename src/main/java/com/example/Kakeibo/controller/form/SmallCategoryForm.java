@@ -7,7 +7,7 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class SmallCategory {
+public class SmallCategoryForm {
 
     private int id;
 

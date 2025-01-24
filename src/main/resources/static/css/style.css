@@ -1,0 +1,90 @@
+body {
+	background-color: #FFF;
+}
+
+.table {
+    border-collapse: collapse;
+    border-top : 1px solid #ddd;
+    border-bottom : 1px solid #ccc;
+}
+
+.main-contents {
+    width : 80%;
+}
+
+.header-contents {
+    margin-top : 1.5rem;
+    margin-bottom : 1.5rem;
+}
+
+.header {
+	text-align: right;
+}
+
+.errorMessages {
+    color : red;
+    font-size : 14px;
+}
+
+.alert-danger{
+    height: 50px;
+}
+
+.box-left {
+	width : 50%;
+	height : 100%;
+	float : left;
+	/*padding : 0 20px 0 20px;*/
+}
+
+.box-right {
+	width : 50%;
+	height : 100%;
+	float : right;
+}
+
+.bop {
+    border : 1px solid #ddd;
+    border-radius : 10px;
+    padding : 20px;
+}
+
+.bop-item {
+    text-align : right;
+    font-weight : bold;
+}
+.income {
+    color : blue;
+}
+.expense {
+    color : red;
+}
+
+
+/*（仮）ボタンのCSS*/
+..btn a {
+   transition: all .5s;
+ }
+ .btn a::before {
+   border-right: 3px solid #fff;
+   border-top: 3px solid #fff;
+   bottom: 0;
+   content: "";
+   height: 10px;
+   margin: auto;
+   position: absolute;
+   right: 40px;
+   top: 0;
+   transform: rotate(45deg);
+   transition: all .5s;
+   width: 10px;
+ }
+ .btn a:hover {
+   background-color: #fff;
+   color: #2d96ff;
+ }
+ .btn a:hover::before {
+   border-right: 3px solid #2d96ff;
+   border-top: 3px solid #2d96ff;
+ }
+

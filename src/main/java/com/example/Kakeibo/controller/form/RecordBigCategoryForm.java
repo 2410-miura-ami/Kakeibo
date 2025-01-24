@@ -3,19 +3,17 @@ package com.example.Kakeibo.controller.form;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Date;
+import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class BigCategory {
+public class RecordBigCategoryForm {
 
     private int id;
 
     private String name;
 
-    private int bop;
+    private BigDecimal totalAmount;
 
-    private Date createdDate;
-
-    private Date updatedDate;
+    private int bigCategoryId;
 }

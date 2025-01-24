@@ -1,10 +1,57 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>家計簿画面</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link th:href="@{/css/style.css}" rel="styleSheet">
+    <script th:src="@{/js/jquery-3.7.1.js}"></script>
+    <script th:src="@{/js/jquery-3.7.1.min.js}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+<div class="main-contents mx-auto">
+    <div>家計簿小画面</div>
+    <div class="box-left ">
 
+    </div>
+
+    <div class="box-right">
+
+
+        <div th:each="expenditureItem : ${expenditureBySmallCategory}">
+            <span th:text="${expenditureItem.name}"></span>
+            <span th:text="${expenditureItem.totalAmount}"></span>
+        </div>
+
+
+        <table class="table table-hover">
+            <tbody>
+            <div th:each="expenditureItem : ${expenditureBySmallCategory}">
+                <tr>
+                    <td>
+                        <span th:text="${expenditureItem.name}"></span>
+                    </td>
+                    <td>
+                        <span th:text="${expenditureItem.totalAmount}"></span>
+                    </td>
+                    <td>
+                        <div class="btn">
+                            <a th:href="@{/houseHold/{smallCategoryId}(smallCategoryId=${expenditureItem.smallCategoryId})}">
+                                <span>→</span>
+                            </a>
+                        </div>
+                    </td>
+                </tr>
+
+            </div>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
 </body>
 </html>
