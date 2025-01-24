@@ -2,21 +2,18 @@ package com.example.Kakeibo.controller.form;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
 @Getter
 @Setter
-public class User {
+public class BigCategoryForm {
 
     private int id;
 
     private String name;
 
-    private String email;
-
-    private String password;
+    private int bop;
 
     private Date createdDate;
 
