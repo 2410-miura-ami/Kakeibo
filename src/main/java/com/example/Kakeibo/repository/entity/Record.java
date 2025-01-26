@@ -45,4 +45,5 @@ public class Record {
     @Column(name = "updated_date", insertable = true, updatable = true)
     @Temporal(TemporalType.TIMESTAMP)
     private Date updatedDate;
+
 }

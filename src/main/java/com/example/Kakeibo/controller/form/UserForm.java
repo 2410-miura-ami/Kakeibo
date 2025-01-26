@@ -7,13 +7,15 @@ import java.util.Date;
 
 @Getter
 @Setter
-public class BigCategory {
+public class UserForm {
 
     private int id;
 
     private String name;
 
-    private int bop;
+    private String email;
+
+    private String password;
 
     private Date createdDate;
 

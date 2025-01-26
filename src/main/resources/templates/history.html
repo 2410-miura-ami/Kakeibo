@@ -1,10 +1,31 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.w3.org/1999/xhtml" >
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <meta charset="utf-8">
+    <title>カレンダー</title>
+    <link th:href="@{/css/history.css}" rel="styleSheet">
 </head>
 <body>
 
+<form th:action="@{/history}">
+    <input type="hidden" id="previousMonth" name="previousMonth" value="">
+    <input type="submit" value="前の月" />
+</form>
+<form th:action="@{/history}">
+    <input type="hidden" id="nextMonth" name="nextMonth" value="">
+    <input type="submit" value="次の月" />
+</form>
+
+<div id="error-message" style="color: red;"></div>
+
+<script th:inline="javascript">
+    const stringDate = /*[[${date}]]*/ 'date';
+    var recordList = /*[[${recordList}]]*/ '[]';
+    recordList = JSON.parse(recordList);
+</script>
+
+<div id="calendar"></div>
+
+<script th:src="@{/js/history.js}"></script>
 </body>
 </html>
