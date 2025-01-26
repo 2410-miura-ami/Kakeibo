@@ -1,0 +1,103 @@
+body {
+	background-color: #FFF;
+}
+header {
+    display: flex;
+    align-items: center;
+    height : 70px;
+    padding : 0 20px;
+    justify-content: space-between;
+    margin-bottom : 20px;
+    border-bottom : 1px solid #ddd;
+}
+
+.table {
+    border-collapse: collapse;
+    border-top : 1px solid #ddd;
+    border-bottom : 1px solid #ccc;
+}
+
+.main-contents {
+    width : 80%;
+}
+
+.errorMessages {
+    color : red;
+    font-size : 14px;
+}
+
+.alert-danger{
+    height: 50px;
+}
+
+.box-left {
+	width : 50%;
+	height : 100%;
+	float : left;
+}
+
+.box-right {
+	width : 50%;
+	height : 100%;
+	float : right;
+	margin-top : 70px;
+}
+
+.bop {
+    width : 300px;
+    border : 1px solid #ddd;
+    border-radius : 10px;
+    padding : 20px 50px;
+    margin-top : 10px;
+}
+
+.bop-items {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.bop-item {
+    font-weight : bold;
+    font-size : 20px;
+}
+.income {
+    color : blue;
+}
+.expense {
+    color : red;
+}
+
+.displayCenter {
+    text-align : center;
+    margin-bottom : 20px;
+}
+
+
+/*（仮）ボタンのCSS*/
+..btn a {
+   transition: all .5s;
+ }
+ .btn a::before {
+   border-right: 3px solid #fff;
+   border-top: 3px solid #fff;
+   bottom: 0;
+   content: "";
+   height: 10px;
+   margin: auto;
+   position: absolute;
+   right: 40px;
+   top: 0;
+   transform: rotate(45deg);
+   transition: all .5s;
+   width: 10px;
+ }
+ .btn a:hover {
+   background-color: #fff;
+   color: #2d96ff;
+ }
+ .btn a:hover::before {
+   border-right: 3px solid #2d96ff;
+   border-top: 3px solid #2d96ff;
+ }
+
