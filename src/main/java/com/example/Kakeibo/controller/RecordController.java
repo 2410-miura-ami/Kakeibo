@@ -5,6 +5,7 @@ import com.example.Kakeibo.controller.form.RecordForm;
 import com.example.Kakeibo.service.BigSmallCategoryService;
 import com.example.Kakeibo.service.RecordService;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,12 +22,14 @@ public class RecordController {
     @Autowired
     BigSmallCategoryService bigSmallCategoryService;
 
+    @Autowired
+    HttpSession session;
+
     /*
      * 個別記録画面表示
      */
-
     @GetMapping("/showRecord")
-    public ModelAndView selectRecord(@RequestParam(required = false) String date, @RequestParam(required = false) Integer smallCategoryId, @RequestParam(required = false) Integer bidCategoryId) {
+    public ModelAndView selectRecord(@RequestParam(required = false) String date, @RequestParam(required = false) Integer smallCategoryId) {
         ModelAndView mav = new ModelAndView();
 
         //ログインユーザ情報を取得
@@ -42,7 +45,8 @@ public class RecordController {
         if(smallCategoryId != null){
             results = bigSmallCategoryService.select(loginId, smallCategoryId);
             mav.addObject("back", "houseHold");
-            mav.addObject("bigCategoryId", bidCategoryId);
+            Integer bigCategoryId = (Integer)session.getAttribute("bigCategoryId");
+            mav.addObject("bigCategoryId", bigCategoryId);
         }
 
         mav.addObject("records", results);
