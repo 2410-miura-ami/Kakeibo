@@ -22,14 +22,15 @@ public interface RecordRepository extends JpaRepository<Record, Integer> {
                     "FROM records " +
                     "WHERE date BETWEEN DATE_SUB( :firstDate , interval 3 month) " +
                     "AND DATE_ADD( :lastDate , interval 3 month) " +
+                    "AND user_id = :loginId " +
                     "GROUP BY DATE_FORMAT(date, '%Y-%m') " +
                     "ORDER BY time ASC; ",
             nativeQuery = true
     )
-    public List<Object[]> selectAmount7Month(@Param("firstDate") Date firstDate, @Param("lastDate") Date lastDate);
+    public List<Object[]> selectAmount7Month(@Param("loginId") Integer loginId, @Param("firstDate") Date firstDate, @Param("lastDate") Date lastDate);
 
-    default List<SevenMonthSummary> findMonthSummaries(Date firstDate, Date lastDate) {
-        return selectAmount7Month(firstDate, lastDate).stream()
+    default List<SevenMonthSummary> findMonthSummaries(Integer loginId, Date firstDate, Date lastDate) {
+        return selectAmount7Month(loginId, firstDate, lastDate).stream()
                 .map(SevenMonthSummary::new)
                 .collect(Collectors.toList());
     }

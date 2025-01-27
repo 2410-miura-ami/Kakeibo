@@ -1,17 +1,22 @@
 package com.example.Kakeibo.controller;
 
+import com.example.Kakeibo.controller.form.RecordBigCategoryForm;
 import com.example.Kakeibo.controller.form.UserForm;
 import com.example.Kakeibo.repository.entity.SevenMonthSummary;
+import com.example.Kakeibo.service.BigCategoryService;
 import com.example.Kakeibo.service.RecordService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
 
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -24,23 +29,37 @@ public class HomeController {
     HttpSession session;
     @Autowired
     RecordService recordService;
+    @Autowired
+    BigCategoryService bigCategoryService;
+
+    public static Date displayDate = new Date();
 
     @GetMapping
-    public ModelAndView top() {
+    public ModelAndView top(@RequestParam(required = false) String num) {
         ModelAndView mav = new ModelAndView();
         mav.setViewName("/home");
         //セッションにログインユーザ情報をつめる
         UserForm loginUser = (UserForm) session.getAttribute("loginUser");
+        Integer loginId = loginUser.getId();
         mav.addObject("loginUser", loginUser);
 
         //デフォルト表示月
-        Date displayDate = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(displayDate);
+        if (num != null){
+            int reqNum = Integer.parseInt(num);
+            calendar.add(Calendar.MONTH, reqNum);
+            displayDate  = calendar.getTime();
+        }
+
         Date firstDate = getFirstDate(displayDate);
         Date lastDate = getLastDate(displayDate);
 
-        List<SevenMonthSummary> monthSummaries = recordService.findMonthSummaries(firstDate, lastDate);
+        //前後3か月分の1月ごとの収支情報を取得
+        List<SevenMonthSummary> monthSummaries = recordService.findMonthSummaries(loginId,firstDate, lastDate);
         mav.addObject("monthSummaries", monthSummaries);
+
 
         String monthLabel[] = monthSummaries.stream().map(SevenMonthSummary::getMonth).toArray(String[]::new);
         BigDecimal incomeData[] = monthSummaries.stream().map(SevenMonthSummary::getIncomeTotalAmount).toArray(BigDecimal[]::new);
@@ -48,6 +67,35 @@ public class HomeController {
         mav.addObject("monthLabel", monthLabel);
         mav.addObject("incomeData", incomeData);
         mav.addObject("expenseData", expenseData);
+
+        //以下、円グラフ表示処理
+        List<RecordBigCategoryForm> recordBigCategoryFormList = bigCategoryService.findByBigCategory(loginId, firstDate, lastDate);
+        //それぞれのListを作成し、そのListを配列に変換
+        List<String> bigCategoryName = new ArrayList<>();
+        List<BigDecimal> amountByCategory = new ArrayList<>();
+        for (RecordBigCategoryForm exBigCategory : recordBigCategoryFormList) {
+            bigCategoryName.add(exBigCategory.getName());
+            amountByCategory.add(exBigCategory.getTotalAmount());
+        }
+        //配列に変換
+        String expenseLabel[] = bigCategoryName.toArray(new String[bigCategoryName.size()]);
+        BigDecimal bigCategoryData[] = amountByCategory.toArray(new BigDecimal[amountByCategory.size()]);
+
+        //支出と収入の総額を取得
+        BigDecimal incomeTotalAmount;//収入
+        BigDecimal expenseTotalAmount;//支出
+
+        List<RecordBigCategoryForm> recordBopForms = bigCategoryService.findByBop(loginId, firstDate, lastDate);
+        incomeTotalAmount = (!recordBopForms.isEmpty()) ? recordBopForms.get(0).getTotalAmount() : BigDecimal.valueOf(0);
+        expenseTotalAmount = (recordBopForms.size() == 2) ? recordBopForms.get(1).getTotalAmount() : BigDecimal.valueOf(0);
+        mav.addObject("expenditureByBigCategory", recordBigCategoryFormList);
+        mav.addObject("incomeTotalAmount", incomeTotalAmount);
+        mav.addObject("expenseTotalAmount", expenseTotalAmount);
+        mav.addObject("startDate", firstDate);
+
+        //円グラフの表示のため配列を画面にセット
+        mav.addObject("expenseLabel", expenseLabel);
+        mav.addObject("bigCategoryData", bigCategoryData);
         return mav;
     }
 

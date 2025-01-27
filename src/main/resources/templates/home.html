@@ -8,59 +8,173 @@
     <link th:href="@{/css/style.css}" rel="styleSheet">
     <script th:src="@{/js/script.js}"></script>
     <script th:src="@{/js/jquery.min.js}"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.3.0/Chart.bundle.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="header">
+    <header>
+        <h1>Kakeibo</h1>
         <div class="me-3 fs-6">
-        　　  氏名：<span th:text="${loginUser.name}"/><br>
+            　　  氏名：<span th:text="${loginUser.name}"/><br>
         </div>
-    </div>
+        <form th:action="@{/logout}" method="get">
+            <button type="submit" class="btn btn-outline-secondary me-3">ログアウト</button>
+        </form>
+    </header>
     <div class="main-contents">
-        <div th:each="monthSummary : ${monthSummaries}">
-            <table class="table table-newUser">
-                <tr><th><span th:text="${monthSummary.month + '収入'}"/></th><td><span th:text="${monthSummary.incomeTotalAmount}" /></td></tr>
-                <tr><th><span th:text="${monthSummary.month + '支出'}"/></th><td><span th:text="${monthSummary.expenseTotalAmount}" /></td></tr>
+        <div class="bar-chart ">
+            <h4 class="d-grid gap-2 col-6 mx-auto displayCenter">月別収支額</h4>
+            <a th:href="@{/(num = -1)}" class="float-start">&lt;前月へ</a>
+            <a th:href="@{/(num = 1)}" class="float-end">翌月へ&gt;</a>
+            <div class="container" style="width:60%">
+                <canvas id="canvas"></canvas>
+            </div>
+            <script type="text/javascript" th:inline="javascript">
+                window.onload = function() {
+                    ctx = document.getElementById("canvas").getContext("2d");
+                    window.myBar = new Chart(ctx, {
+                        type: 'bar', // ここは bar にする必要があります
+                        data: barChartData,
+                        options: complexChartOption
+                    });
+                };
+            </script>
+            <script type="text/javascript" th:inline="javascript">
+                // とある4週間分のデータログ
+                var barChartData = {
+                    labels: [[${monthLabel}]],
+                    datasets: [
+                    {
+                        label: '収入',
+                        data: [[${incomeData}]],
+                        borderColor	: "rgba(254,97,132,0.8)",
+                        backgroundColor	: "rgba(254,97,132,0.5)",
+                    },
+                    {
+                        label: '支出',
+                        data: [[${expenseData}]],
+                        borderColor	: "rgba(54,164,235,0.8)",
+                        backgroundColor	: "rgba(54,164,235,0.5)",
+                    },
+                    ],
+                };
+            </script>
+            <script type="text/javascript" th:inline="javascript">
+                var complexChartOption = {
+                    responsive: true,
+                    scales: {
+                       display: true,
+                       y: {
+                            title: {
+                                display: true,
+                                text: '円'
+                            },
+                       },
+                    },
+                };
+            </script>
+        </div>
+        <div class="box-left ">
+            <h4 class="d-grid gap-2 col-6 mx-auto displayCenter" th:text="${#dates.format(startDate, 'yyyy年MM月') + 'の支出額内訳'}"></h4>
+
+            <div class="pie-chart">
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col m6 s12">
+                            <div class="exChart d-grid gap-2 col-8 mx-auto">
+                                <canvas id="expenseChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- CDN -->
+                <script type="text/javascript" th:inline="javascript">
+
+                    var ctx = document.getElementById("expenseChart");
+                    var expenseChart = new Chart(ctx, {
+                      type: 'doughnut',
+                      data: {
+                        labels: [[ ${expenseLabel} ]], //変数式で取り出す
+                        datasets:[{
+                            backgroundColor: [
+                              "rgb(255, 99, 132)",
+                              "rgb(54, 162, 235)",
+                              "rgb(255, 205, 86)",
+                              "rgb(255, 99, 71)",
+                              "rgb(173, 255, 47)",
+                              "rgb(100, 149, 237)",
+                              "rgb(221, 160, 221)",
+                              "rgb(244, 164, 96)",
+                              "rgb(240, 248, 255)",
+                              "rgb(192, 192, 192)",
+                              "rgb(220, 20, 60)",
+                              "rgb(189, 183, 107)",
+                              "rgb(46, 139, 87)",
+                              "rgb(72, 209, 204)",
+                              "rgb(218, 112, 214)",
+                              "rgb(210, 105, 30)",
+                              "rgb(47, 79, 79)"
+                            ],
+                            data:[[${bigCategoryData}]],  //labelと同様
+                        }]
+                      },
+                      options: {
+                        title: {
+                          display: true,
+                          text: '支出'
+                        }
+                      }
+                    });
+                </script>
+
+            </div>
+
+            <div class="mx-auto bop">
+                <div class="bop-items">
+                    <span>収入</span><span  class="bop-item income" th:text="${incomeTotalAmount + '円'}"></span>
+                </div>
+                <div class="bop-items">
+                    <span>支出</span><span  class="bop-item expense" th:text="${expenseTotalAmount + '円'}"></span>
+                </div>
+                <div class="bop-items">
+                    <span>収支</span><span  class="bop-item" th:text="${incomeTotalAmount - expenseTotalAmount + '円'}"></span>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="box-right">
+
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>カテゴリ名</th>
+                    <th>金額</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <div th:each="expenditureItem : ${expenditureByBigCategory}">
+                    <tr>
+                        <td>
+                            <span th:text="${expenditureItem.name}"></span>
+                        </td>
+                        <td>
+                            <span th:text="${expenditureItem.totalAmount + '円'}"></span>
+                        </td>
+                        <td>
+                            <div class="btn">
+                                <a th:href="@{/houseHold/{bigCategoryId}(bigCategoryId=${expenditureItem.bigCategoryId})}">
+                                    <span>→</span>
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+
+                </div>
+                </tbody>
             </table>
         </div>
-        <div class="container" style="width:100%">
-            <canvas id="canvas"></canvas>
-        </div>
-        <script type="text/javascript" th:inline="javascript">
-            window.onload = function() {
-                ctx = document.getElementById("canvas").getContext("2d");
-                window.myBar = new Chart(ctx, {
-                    type: 'bar', // ここは bar にする必要があります
-                    data: barChartData,
-                    options: complexChartOption
-                });
-            };
-        </script>
-        <script type="text/javascript" th:inline="javascript">
-            // とある4週間分のデータログ
-            var barChartData = {
-                labels: [[${monthLabel}]],
-                datasets: [
-                {
-                    label: 'sample-line',
-                    data: [[${incomeData}]],
-                    borderColor	: "rgba(254,97,132,0.8)",
-                    backgroundColor	: "rgba(254,97,132,0.5)",
-                },
-                {
-                    label: 'sample-bar',
-                    data: [[${expenseData}]],
-                    borderColor	: "rgba(54,164,235,0.8)",
-                    backgroundColor	: "rgba(54,164,235,0.5)",
-                },
-                ],
-            };
-        </script>
-        <script type="text/javascript" th:inline="javascript">
-            var complexChartOption = {
-                responsive: true,
-            };
-        </script>
     </div>
 </body>
 </html>

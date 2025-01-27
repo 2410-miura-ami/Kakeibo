@@ -15,8 +15,8 @@ public class RecordService {
     @Autowired
     RecordRepository recordRepository;
 
-    public List<SevenMonthSummary> findMonthSummaries(Date firstDate, Date lastDate){
-        List<SevenMonthSummary> monthSummaries = recordRepository.findMonthSummaries(firstDate, lastDate);
+    public List<SevenMonthSummary> findMonthSummaries(Integer loginId, Date firstDate, Date lastDate){
+        List<SevenMonthSummary> monthSummaries = recordRepository.findMonthSummaries(loginId, firstDate, lastDate);
         return monthSummaries;
     }
 }
