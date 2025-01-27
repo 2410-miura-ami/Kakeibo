@@ -83,7 +83,8 @@
                     </td>
                     <td>
                         <div class="btn btn-arrow-right">
-                            <a th:href="@{/houseHold/{smallCategoryId}(smallCategoryId=${expenditureItem.smallCategoryId})}">
+                            <a th:href="@{/showRecord?smallCategoryId={smallCategoryId}(smallCategoryId=${expenditureItem.smallCategoryId})}">
+                                <input name="bidCategoryId" th:value="${bigCategoryId}" type="hidden"/>
                             </a>
                         </div>
                     </td>
