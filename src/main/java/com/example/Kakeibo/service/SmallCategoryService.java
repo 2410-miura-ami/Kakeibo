@@ -24,6 +24,10 @@ public class SmallCategoryService {
     public List<RecordSmallCategoryForm> findBySmallCategory(int userId, Date startDate, Date endDate, int bigCategoryId) {
         List<Object[]> results = smallCategoryRepository.findBySmallCategory(userId, startDate, endDate, bigCategoryId);
 
+        if (results.isEmpty()) {
+            return null;
+        }
+
         List<RecordSmallCategoryForm> recordSmallCategoryForms = setRecordSmallCategoryForm(results);
         return recordSmallCategoryForms;
     }
@@ -36,10 +40,11 @@ public class SmallCategoryService {
             BigDecimal totalAmount = (BigDecimal) result[0];
             int smallCategoryId = (int) result[1];
             String name = (String) result[2];
-            recordSmallCategoryForm.setName(name);
+            String color = (String) result[3];
             recordSmallCategoryForm.setTotalAmount(totalAmount);
             recordSmallCategoryForm.setSmallCategoryId(smallCategoryId);
-            //BeanUtils.copyProperties(result, recordBigCategoryForm);
+            recordSmallCategoryForm.setName(name);
+            recordSmallCategoryForm.setColor(color);
             recordSmallCategoryForms.add(recordSmallCategoryForm);
         }
         return recordSmallCategoryForms;

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,10 @@ public class BigCategoryService {
     public List<RecordBigCategoryForm> findByBigCategory(int userId, Date startDate, Date endDate) {
         List<Object[]> results = bigCategoryRepository.findByBigCategory(userId, startDate, endDate);
 
+        if(results.isEmpty()) {
+            return null;
+        }
+
         List<RecordBigCategoryForm> recordBigCategoryForms = setRecordBigCategoryForm(results);
         return recordBigCategoryForms;
     }
@@ -38,9 +43,11 @@ public class BigCategoryService {
             BigDecimal totalAmount = (BigDecimal) result[0];
             int bigCategoryId = (int) result[1];
             String name = (String) result[2];
-            recordBigCategoryForm.setName(name);
+            String color = (String) result[3];
             recordBigCategoryForm.setTotalAmount(totalAmount);
             recordBigCategoryForm.setBigCategoryId(bigCategoryId);
+            recordBigCategoryForm.setName(name);
+            recordBigCategoryForm.setColor(color);
             recordBigCategoryForms.add(recordBigCategoryForm);
         }
         return recordBigCategoryForms;
@@ -51,6 +58,10 @@ public class BigCategoryService {
      */
     public List<RecordBigCategoryForm> findByBop(int userId, Date startDate, Date endDate) {
         List<Object[]> results = bigCategoryRepository.findByBop(userId, startDate, endDate);
+
+        if (results.isEmpty()) {
+            return null;
+        }
 
         List<RecordBigCategoryForm> recordBopForms = setRecordBopForm(results);
         return recordBopForms;
@@ -76,8 +87,32 @@ public class BigCategoryService {
     public List<RecordBigCategoryForm> findByBigCategory(int userId, Date startDate, Date endDate, int bigCategoryId) {
         List<Object[]> results = bigCategoryRepository.findAmountByBigCategory(userId, startDate, endDate, bigCategoryId);
 
+        //未登録の月の処理
+        //未登録だと、上記resultsの[0]:totalAmount入る部分と、[1]:bigCategoryId入る部分がnullで返ってくる
+        if (results.get(0)[0] == null) {
+            List<RecordBigCategoryForm> recordBigCategoryForms = new ArrayList<>();
+            RecordBigCategoryForm recordBigCategoryForm = new RecordBigCategoryForm();
+            recordBigCategoryForm.setTotalAmount(BigDecimal.valueOf(0));
+            recordBigCategoryForm.setBigCategoryId(bigCategoryId);
+            recordBigCategoryForm.setName((String) results.get(0)[2]);
+            recordBigCategoryForm.setColor((String) results.get(0)[3]);
+            recordBigCategoryForms.add(recordBigCategoryForm);
+            return recordBigCategoryForms;
+        }
+
         List<RecordBigCategoryForm> recordBigCategoryForms = setRecordBigCategoryForm(results);
         return recordBigCategoryForms;
+    }
+
+    /*
+     * 渡ってきたbigCategoryIDの存在チェック
+     */
+    public boolean findById(int bigCategoryId) {
+        BigCategory bigCategory = bigCategoryRepository.findById(bigCategoryId).orElse(null);
+        if (bigCategory == null) {
+            return false;
+        }
+        return true;
     }
 
 

@@ -13,6 +13,8 @@ public class SmallCategoryForm {
 
     private String name;
 
+    private String color;
+
     private int bigCategoryId;
 
     private int bop;

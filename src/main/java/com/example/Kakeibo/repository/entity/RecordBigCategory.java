@@ -21,6 +21,9 @@ public class RecordBigCategory {
     @Column
     private String name;
 
+    @Column
+    private String color;
+
     @Column(name = "totalAmount")
     private BigDecimal totalAmount;
 }

@@ -21,7 +21,9 @@
 
 <div class="main-contents mx-auto">
     <div class="box-left ">
+        <a th:href="@{/smallCategory/selectMonth(select = -1, bigCategoryId = ${selectBigCategory.get(0).bigCategoryId})}" class="prevMonth btn btn-outline-secondary">前月</a>
         <h4 class="d-grid gap-2 col-6 mx-auto displayCenter" th:text="${#dates.format(startDate, 'yyyy年MM月')}"></h4>
+        <a th:href="@{/smallCategory/selectMonth(select = 1, bigCategoryId = ${selectBigCategory.get(0).bigCategoryId})}" class="btn btn-outline-secondary">翌月</a>
         <h6 th:text="${selectBigCategory.get(0).name + '：' + selectBigCategory.get(0).totalAmount + '円'}" class="d-grid gap-2 col-6 mx-auto displayCenter"></h6>
 
         <div class="container">
@@ -42,25 +44,7 @@
               data: {
                 labels: [[ ${expenseLabel} ]], //変数式で取り出す
                 datasets:[{
-                    backgroundColor: [
-                      "rgb(255, 99, 132)",
-                      "rgb(54, 162, 235)",
-                      "rgb(255, 205, 86)",
-                      "rgb(255, 99, 71)",
-                      "rgb(173, 255, 47)",
-                      "rgb(100, 149, 237)",
-                      "rgb(221, 160, 221)",
-                      "rgb(244, 164, 96)",
-                      "rgb(240, 248, 255)",
-                      "rgb(192, 192, 192)",
-                      "rgb(220, 20, 60)",
-                      "rgb(189, 183, 107)",
-                      "rgb(46, 139, 87)",
-                      "rgb(72, 209, 204)",
-                      "rgb(218, 112, 214)",
-                      "rgb(210, 105, 30)",
-                      "rgb(47, 79, 79)"
-                    ],
+                    backgroundColor: [[${categoryColor}]],
                     data:[[${expenseData}]],  //labelと同様
                 }]
               },
@@ -111,5 +95,12 @@
     </div>
 
 </div>
+
+<footer class="footer-contents">
+    <form th:action="@{/houseHold}">
+        <input type="submit" value="戻る" class="btn btn-secondary btn-sm" />
+    </form>
+</footer>
+
 </body>
 </html>

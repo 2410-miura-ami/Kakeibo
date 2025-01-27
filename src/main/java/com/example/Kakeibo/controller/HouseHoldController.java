@@ -9,6 +9,7 @@ import com.example.Kakeibo.service.BigCategoryService;
 import com.example.Kakeibo.service.SmallCategoryService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -45,12 +46,15 @@ public class HouseHoldController {
         ModelAndView mav = new ModelAndView();
 
         //ログインユーザ情報を取得
-        //UserForm loginUser = (UserForm) session.getAttribute("loginUser");
-        //Integer loginId = loginUser.getId();
-        Integer loginId = 1;
+        UserForm loginUser = (UserForm) session.getAttribute("loginUser");
+        Integer loginId = loginUser.getId();
 
-        //【仮】表示月の取得
-        Date now = new Date();
+        //エラーメッセージの取得と表示
+        List<String> errorMessages = (List<String>)session.getAttribute("errorMessages");
+        mav.addObject("errorMessages", errorMessages);
+        session.removeAttribute("errorMessages");
+
+        //表示月の取得
         Calendar calender = Calendar.getInstance();
         calender.setTime(displayDate);
         calender.set(Calendar.DAY_OF_MONTH, 1);
@@ -75,21 +79,39 @@ public class HouseHoldController {
         //それぞれのListを作成し、そのListを配列に変換
         List<String> bigCategoryName = new ArrayList<>();
         List<BigDecimal> amountByCategory = new ArrayList<>();
-        for (RecordBigCategoryForm exBigCategory : recordBigCategoryFormList) {
-            bigCategoryName.add(exBigCategory.getName());
-            amountByCategory.add(exBigCategory.getTotalAmount());
+        List<String> color = new ArrayList<>();
+        if (recordBigCategoryFormList != null) {
+            //それぞれのリストに追加
+            for (RecordBigCategoryForm exBigCategory : recordBigCategoryFormList) {
+                bigCategoryName.add(exBigCategory.getName());
+                amountByCategory.add(exBigCategory.getTotalAmount());
+                color.add(exBigCategory.getColor());
+            }
+        } else {
+            bigCategoryName.add("未登録");
+            amountByCategory.add(BigDecimal.valueOf(1));
+            color.add("rgb(245, 245, 245)");
         }
         //配列に変換
         String expenseLabel[] = bigCategoryName.toArray(new String[bigCategoryName.size()]);
         BigDecimal expenseData[] = amountByCategory.toArray(new BigDecimal[amountByCategory.size()]);
+        String categoryColor[] = color.toArray(new String[color.size()]);
 
         //支出と収入の総額を取得
-        BigDecimal incomeTotalAmount;//収入
-        BigDecimal expenseTotalAmount;//支出
+        BigDecimal incomeTotalAmount = BigDecimal.valueOf(0);//収入
+        BigDecimal expenseTotalAmount = BigDecimal.valueOf(0);//支出
 
         List<RecordBigCategoryForm> recordBopForms = bigCategoryService.findByBop(loginId, startDate, endDate);
-        incomeTotalAmount = recordBopForms.get(0).getTotalAmount();
-        expenseTotalAmount = recordBopForms.get(1).getTotalAmount();
+        if (recordBopForms != null) {
+            if (recordBopForms.size() == 2) {
+                incomeTotalAmount = recordBopForms.get(0).getTotalAmount();
+                expenseTotalAmount = recordBopForms.get(1).getTotalAmount();
+            } else if (recordBopForms.size() == 1 && recordBopForms.get(0).getId() == 1) {
+                incomeTotalAmount = recordBopForms.get(0).getTotalAmount();
+            } else if (recordBopForms.size() == 1 && recordBopForms.get(0).getId() == 2) {
+                expenseTotalAmount = recordBopForms.get(0).getTotalAmount();
+            }
+        }
 
         mav.addObject("expenditureByBigCategory", recordBigCategoryFormList);
         mav.addObject("incomeTotalAmount", incomeTotalAmount);
@@ -99,6 +121,7 @@ public class HouseHoldController {
         //円グラフの表示のため配列を画面にセット
         mav.addObject("expenseLabel", expenseLabel);
         mav.addObject("expenseData", expenseData);
+        mav.addObject("categoryColor", categoryColor);
 
         //画面遷移先を指定
         mav.setViewName("/big_household");
@@ -111,16 +134,31 @@ public class HouseHoldController {
      *家計簿（小）画面表示処理
      */
     @GetMapping("/houseHold/{bigCategoryId}")
-    public ModelAndView houseHoldSmall(@PathVariable("bigCategoryId") int bigCategoryId) throws ParseException {
+    public ModelAndView houseHoldSmall(@PathVariable("bigCategoryId") String bigCategory) throws ParseException {
         ModelAndView mav = new ModelAndView();
 
-        //ログインユーザ情報を取得
-        //UserForm loginUser = (UserForm) session.getAttribute("loginUser");
-        //Integer loginId = loginUser.getId();
-        Integer loginId = 1;
+        List<String> errorMessages = new ArrayList<>();
+        //大カテゴリIDの表記チェック
+        if (bigCategory == null || !bigCategory.matches("^[0-9]+$")) {
+            errorMessages.add("・不正なパラメータが入力されました");
+            session.setAttribute("errorMessages", errorMessages);
+            return new ModelAndView("redirect:/houseHold");
+        }
 
-        //【仮】表示月の取得
-        //Date now = new Date();
+        int bigCategoryId = Integer.parseInt(bigCategory);
+        //存在チェック（登録してあるカテゴリ名かチェック）
+        if(!bigCategoryService.findById(bigCategoryId)) {
+            errorMessages.add("・不正なパラメータが入力されました");
+            session.setAttribute("errorMessages", errorMessages);
+            return new ModelAndView("redirect:/houseHold");
+        }
+
+
+        //ログインユーザ情報を取得
+        UserForm loginUser = (UserForm) session.getAttribute("loginUser");
+        Integer loginId = loginUser.getId();
+
+        //表示月の取得
         Calendar calender = Calendar.getInstance();
         calender.setTime(displayDate);
         calender.set(Calendar.DAY_OF_MONTH, 1);
@@ -144,13 +182,23 @@ public class HouseHoldController {
         //円グラフ表示のため、Listから配列に格納
         List<String> smallCategoryName = new ArrayList<>();
         List<BigDecimal> amountByCategory = new ArrayList<>();
-        for (RecordSmallCategoryForm exSmallCategory : recordSmallCategoryFormList) {
-            smallCategoryName.add(exSmallCategory.getName());
-            amountByCategory.add(exSmallCategory.getTotalAmount());
+        List<String> color = new ArrayList<>();
+        if (recordSmallCategoryFormList != null) {
+            //それぞれリストに格納
+            for (RecordSmallCategoryForm exSmallCategory : recordSmallCategoryFormList) {
+                smallCategoryName.add(exSmallCategory.getName());
+                amountByCategory.add(exSmallCategory.getTotalAmount());
+                color.add(exSmallCategory.getColor());
+            }
+        } else {
+            smallCategoryName.add("未登録");
+            amountByCategory.add(BigDecimal.valueOf(1));
+            color.add("rgb(245, 245, 245)");
         }
         //配列に変換
         String expenseLabel[] = smallCategoryName.toArray(new String[smallCategoryName.size()]);
         BigDecimal expenseData[] = amountByCategory.toArray(new BigDecimal[amountByCategory.size()]);
+        String categoryColor[] = color.toArray(new String[color.size()]);
 
         //選択した大カテゴリの記録情報を取得(大カテゴリ名と金額表示のため)
         List<RecordBigCategoryForm> selectBigCategory = bigCategoryService.findByBigCategory(loginId, startDate, endDate, bigCategoryId);
@@ -163,6 +211,7 @@ public class HouseHoldController {
         //円グラフの配列データを画面にセット
         mav.addObject("expenseLabel", expenseLabel);
         mav.addObject("expenseData", expenseData);
+        mav.addObject("categoryColor", categoryColor);
 
         //画面遷移先を指定
         mav.setViewName("/small_household");
@@ -170,4 +219,53 @@ public class HouseHoldController {
         //画面に遷移
         return mav;
     }
+
+    /*
+     * bigCategoryIdが空白の時
+     *家計簿（小）画面
+     */
+    @GetMapping("/houseHold/")
+    public ModelAndView houseHoldInvalid() {
+        ModelAndView mav = new ModelAndView();
+
+        List<String> errorMessages = new ArrayList<>();
+        errorMessages.add("・不正なパラメータが入力されました");
+        session.setAttribute("errorMessages", errorMessages);
+
+        return new ModelAndView("redirect:/houseHold");
+    }
+
+    /*
+     * ページネーション(大カテゴリ)
+     */
+    @GetMapping("/selectMonth")
+    public ModelAndView selectMonth(@RequestParam(name = "select") int selectMonth) {
+        ModelAndView mav = new ModelAndView();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(displayDate);
+        //リクエストパラメータで受け取った数値分表示月を変更
+        calendar.add(Calendar.MONTH, selectMonth);
+        displayDate = calendar.getTime();
+
+        return new ModelAndView("redirect:/houseHold");
+    }
+
+    /*
+     * ページネーション(小カテゴリ)
+     */
+    @GetMapping("/smallCategory/selectMonth")
+    public ModelAndView smallCategorySelectMonth(@RequestParam(name = "select") int selectMonth, @RequestParam(name = "bigCategoryId") int bigCategoryId) {
+        ModelAndView mav = new ModelAndView();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(displayDate);
+        //リクエストパラメータで受け取った数値分表示月を変更
+        calendar.add(Calendar.MONTH, selectMonth);
+        displayDate = calendar.getTime();
+
+        return new ModelAndView("redirect:/houseHold/" + bigCategoryId);
+    }
+
+
 }

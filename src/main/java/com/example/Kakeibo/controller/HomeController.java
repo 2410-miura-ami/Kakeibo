@@ -1,6 +1,8 @@
 package com.example.Kakeibo.controller;
 
+import com.example.Kakeibo.controller.form.RecordBigCategoryForm;
 import com.example.Kakeibo.controller.form.UserForm;
+import com.example.Kakeibo.service.BigCategoryService;
 import com.example.Kakeibo.service.RecordService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +10,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 //ホーム画面の表示を行うコントローラー
@@ -21,6 +26,8 @@ public class HomeController {
     HttpSession session;
     @Autowired
     RecordService recordService;
+    @Autowired
+    BigCategoryService bigCategoryService;
 
     public static Date displayDate = new Date();
 
@@ -39,6 +46,36 @@ public class HomeController {
         Date lastDate = getLastDate(displayDate);
 
         //recordService.selectAmount7Month(firstDate, lastDate);
+
+        //[円グラフ表示]支出の大カテゴリ別記録情報（大カテゴリ名・金額総額）を取得
+        List<RecordBigCategoryForm> recordBigCategoryFormList = bigCategoryService.findByBigCategory(loginUser.getId(), firstDate, lastDate);
+
+        //円グラフ表示のため、大カテゴリ名・金額総額をそれぞれ配列に格納する
+        //それぞれのListを作成し、そのListを配列に変換
+        List<String> bigCategoryName = new ArrayList<>();
+        List<BigDecimal> amountByCategory = new ArrayList<>();
+        List<String> color = new ArrayList<>();
+        if (recordBigCategoryFormList != null) {
+            //それぞれのリストに追加
+            for (RecordBigCategoryForm exBigCategory : recordBigCategoryFormList) {
+                bigCategoryName.add(exBigCategory.getName());
+                amountByCategory.add(exBigCategory.getTotalAmount());
+                color.add(exBigCategory.getColor());
+            }
+        } else {
+            bigCategoryName.add("未登録");
+            amountByCategory.add(BigDecimal.valueOf(1));
+            color.add("rgb(245, 245, 245)");
+        }
+        //配列に変換
+        String expenseLabel[] = bigCategoryName.toArray(new String[bigCategoryName.size()]);
+        BigDecimal expenseData[] = amountByCategory.toArray(new BigDecimal[amountByCategory.size()]);
+        String categoryColor[] = color.toArray(new String[color.size()]);
+
+        //円グラフの表示のため配列を画面にセット
+        mav.addObject("expenseLabel", expenseLabel);
+        mav.addObject("expenseData", expenseData);
+        mav.addObject("categoryColor", categoryColor);
 
         return mav;
     }

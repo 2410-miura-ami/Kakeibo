@@ -74,8 +74,82 @@ header {
 }
 
 
+/*
+.button02 {
+
+  display: block;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #343434;
+
+
+  position: relative;
+}
+
+.button02:before,
+.button02:after {
+  position: absolute;
+  content: '';
+}
+
+.button02:before {
+  top: 25px;
+  left: 14px;
+  width: 17px;
+  height: 1px;
+  background: #fff;
+}
+
+.button02:after {
+  top: 20px;
+  left: 31px;
+  width: 0;
+  height: 0;
+  border-top: 6px solid transparent;
+  border-right: 0 solid transparent;
+  border-bottom: 0 solid transparent;
+  border-left: 8px solid #fff;
+}*/
+
+.btn a {
+  position: relative;
+  display: block;
+  width: 35px;
+  height: 35px;
+  padding: 15px 0;
+  background-color: #fff;
+  border : 2px solid #aaa;
+  border-radius: 50%;
+  font-size: 14px;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.5s 0s ease;
+}
+
+.btn a:hover {
+    background-color: #aaa;
+}
+
+/* アイコンのスタイル */
+.btn-arrow-right a::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 15px;
+  width: 9px;
+  height: 9px;
+  margin: auto;
+  border-top: 2px solid #aaa;
+  border-right: 2px solid #aaa;
+  transform: rotate(45deg);
+  box-sizing: border-box;
+}
+
 /*（仮）ボタンのCSS*/
-..btn a {
+/*..btn a {
    transition: all .5s;
  }
  .btn a::before {
@@ -99,5 +173,5 @@ header {
  .btn a:hover::before {
    border-right: 3px solid #2d96ff;
    border-top: 3px solid #2d96ff;
- }
+ }*/
 
