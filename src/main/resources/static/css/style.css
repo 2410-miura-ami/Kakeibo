@@ -43,6 +43,14 @@ header {
 	margin-top : 70px;
 }
 
+.display-date {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom : 20px;
+    padding : 0 150px;
+}
+
 .bop {
     width : 300px;
     border : 1px solid #ddd;
@@ -73,34 +81,55 @@ header {
     margin-bottom : 20px;
 }
 
+.btn a {
+  position: relative;
+  display: block;
+  width: 35px;
+  height: 35px;
+  padding: 15px 0;
+  border : 1px solid #aaa;
+  border-radius: 50%;
+  font-size: 14px;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  transition: all 0.5s 0s ease;
+}
 
-/*（仮）ボタンのCSS*/
-..btn a {
-   transition: all .5s;
- }
- .btn a::before {
-   border-right: 3px solid #fff;
-   border-top: 3px solid #fff;
-   bottom: 0;
-   content: "";
-   height: 10px;
-   margin: auto;
-   position: absolute;
-   right: 40px;
-   top: 0;
-   transform: rotate(45deg);
-   transition: all .5s;
-   width: 10px;
- }
- .btn a:hover {
-   background-color: #fff;
-   color: #2d96ff;
- }
- .btn a:hover::before {
-   border-right: 3px solid #2d96ff;
-   border-top: 3px solid #2d96ff;
- }
+.btn a:hover {
+    background-color: #aaa;
+}
 
+/* アイコンのスタイル */
+.btn-arrow-right a::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 12px;
+  width: 9px;
+  height: 9px;
+  margin: auto;
+  border-top: 2px solid #aaa;
+  border-right: 2px solid #aaa;
+  transform: rotate(45deg);
+  box-sizing: border-box;
+}
+
+.btn-arrow-right a:hover::after {
+    content: '';
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 12px;
+      width: 9px;
+      height: 9px;
+      margin: auto;
+      border-top: 2px solid #fff;
+      border-right: 2px solid #fff;
+      transform: rotate(45deg);
+      box-sizing: border-box;
+}
 .input-block {
   display: flex;
   flex-direction: column;

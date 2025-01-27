@@ -21,6 +21,9 @@ public class SmallCategory {
     private String name;
 
     @Column
+    private String color;
+
+    @Column
     private int bigCategoryId;
 
     @Column

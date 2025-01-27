@@ -18,7 +18,8 @@ public interface BigCategoryRepository extends JpaRepository<BigCategory, Intege
             value = "SELECT " +
                     "SUM(records.amount) AS totalAmount, " +
                     "records.big_category_id AS bigCategoryId, " +
-                    "big_categories.name AS name " +
+                    "big_categories.name AS name, " +
+                    "big_categories.color AS color " +
                     "FROM records " +
                     "INNER JOIN big_categories " +
                     "ON records.big_category_id = big_categories.id " +
@@ -49,7 +50,8 @@ public interface BigCategoryRepository extends JpaRepository<BigCategory, Intege
             value = "SELECT " +
                     "SUM(records.amount) AS totalAmount, " +
                     "records.big_category_id AS bigCategoryId, " +
-                    "big_categories.name AS name " +
+                    "big_categories.name AS name, " +
+                    "big_categories.color AS color " +
                     "FROM records " +
                     "INNER JOIN big_categories " +
                     "ON records.big_category_id = big_categories.id " +

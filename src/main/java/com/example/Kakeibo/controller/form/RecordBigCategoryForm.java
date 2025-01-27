@@ -13,6 +13,8 @@ public class RecordBigCategoryForm {
 
     private String name;
 
+    private String color;
+
     private BigDecimal totalAmount;
 
     private int bigCategoryId;

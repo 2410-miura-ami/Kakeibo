@@ -1,0 +1,63 @@
+#calendar {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+section {
+    margin: 10px;
+}
+
+table {
+    border-spacing: 0;
+    border-collapse: collapse;
+}
+
+td {
+    border: 1px solid #ddd;
+    text-align: center;
+    vertical-align: top;
+    font-size: 20px;
+}
+
+td:first-child {
+    color: red;
+}
+
+td:last-child {
+    color: royalblue;
+}
+
+td.is-disabled {
+    color: #ccc;
+}
+
+td.dateLine {
+    padding: 20px;
+}
+
+.day {
+    padding-bottom: 50px;
+    padding-right: 50px;
+    padding-left: 50px;
+}
+
+.emptyDay {
+    padding-bottom: 120px;
+    padding-right: 50px;
+    padding-left: 50px;
+}
+
+.expense {
+    color: red;
+}
+
+.income {
+    color: black;
+}
+
+/*カレンダーの日付セルにホバー効果 */
+.calendar_td:hover {
+    background-color: #f0f0f0;  /* 背景色を変更 */
+    cursor: pointer;  /* カーソルをポインタに変更 */
+    transition: background-color 0.3s ease;  /* 背景色の変化にアニメーションを追加 */
+}
