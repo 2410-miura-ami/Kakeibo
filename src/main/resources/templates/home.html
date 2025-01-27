@@ -13,7 +13,9 @@
 </head>
 <body>
     <header>
-        <h1>Kakeibo</h1>
+        <a th:href="@{/}" class="home-logo">
+            <h1>Kakeibo</h1>
+        </a>
         <div class="me-3 fs-6">
             　　  氏名：<span th:text="${loginUser.name}"/><br>
         </div>

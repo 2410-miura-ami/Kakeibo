@@ -30,6 +30,11 @@ header {
     height: 50px;
 }
 
+.home-logo {
+    text-decoration : none;
+    color : #000;
+}
+
 .box-left {
 	width : 50%;
 	height : 100%;
