@@ -21,9 +21,11 @@
 
 <div class="main-contents mx-auto">
     <div class="box-left ">
-        <a th:href="@{/smallCategory/selectMonth(select = -1, bigCategoryId = ${selectBigCategory.get(0).bigCategoryId})}" class="prevMonth btn btn-outline-secondary">前月</a>
-        <h4 class="d-grid gap-2 col-6 mx-auto displayCenter" th:text="${#dates.format(startDate, 'yyyy年MM月')}"></h4>
-        <a th:href="@{/smallCategory/selectMonth(select = 1, bigCategoryId = ${selectBigCategory.get(0).bigCategoryId})}" class="btn btn-outline-secondary">翌月</a>
+        <div class="display-date">
+            <a th:href="@{/smallCategory/selectMonth(select = -1, bigCategoryId = ${selectBigCategory.get(0).bigCategoryId})}" class="btn btn-outline-secondary">前月</a>
+            <h4 th:text="${#dates.format(startDate, 'yyyy年MM月')}"></h4>
+            <a th:href="@{/smallCategory/selectMonth(select = 1, bigCategoryId = ${selectBigCategory.get(0).bigCategoryId})}" class="btn btn-outline-secondary">翌月</a>
+        </div>
         <h6 th:text="${selectBigCategory.get(0).name + '：' + selectBigCategory.get(0).totalAmount + '円'}" class="d-grid gap-2 col-6 mx-auto displayCenter"></h6>
 
         <div class="container">
@@ -80,9 +82,8 @@
                         <span th:text="${expenditureItem.totalAmount + '円'}"></span>
                     </td>
                     <td>
-                        <div class="btn">
+                        <div class="btn btn-arrow-right">
                             <a th:href="@{/houseHold/{smallCategoryId}(smallCategoryId=${expenditureItem.smallCategoryId})}">
-                                <span>→</span>
                             </a>
                         </div>
                     </td>

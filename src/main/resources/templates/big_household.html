@@ -26,9 +26,11 @@
     </div>
 
     <div class="box-left ">
-        <a th:href="@{/selectMonth(select = -1)}" class="prevMonth btn btn-outline-secondary">前月</a>
-        <h4 class="d-grid gap-2 col-6 mx-auto displayCenter" th:text="${#dates.format(startDate, 'yyyy年MM月')}"></h4>
-        <a th:href="@{/selectMonth(select = 1)}" class="btn btn-outline-secondary">翌月</a>
+        <div class="display-date">
+            <a th:href="@{/selectMonth(select = -1)}" class="btn btn-outline-secondary">前月</a>
+            <h4 th:text="${#dates.format(startDate, 'yyyy年MM月')}"></h4>
+            <a th:href="@{/selectMonth(select = 1)}" class="btn btn-outline-secondary">翌月</a>
+        </div>
 
         <div class="pie-chart">
 
@@ -101,7 +103,6 @@
                         <td>
                             <div class="btn btn-arrow-right">
                                 <a th:href="@{/houseHold/{bigCategoryId}(bigCategoryId=${expenditureItem.bigCategoryId})}" class="button02">
-                                    <!--<span>→</span>-->
                                 </a>
                             </div>
                         </td>
@@ -110,7 +111,6 @@
                 </div>
             </tbody>
         </table>
-
     </div>
     <div class="footer">
         <form th:action="@{/}">
