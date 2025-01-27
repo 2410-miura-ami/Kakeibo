@@ -21,7 +21,7 @@ public class RecordForm {
     private int bigCategoryId;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")
-    private Date date;
+    private String date;
 
     private String memo;
 

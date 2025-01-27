@@ -1,10 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <meta charset="utf-8">
+    <title>カレンダー</title>
+    <link th:href="@{/css/style.css}" rel="styleSheet">
+    <link th:href="@{/css/history.css}" rel="styleSheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
+<header>
+    <h1>Kakeibo</h1>
+    <form th:action="@{/}" method="get">
+        <button type="submit" class="btn btn-outline-secondary me-3">戻る</button>
+    </form>
+</header>
 
+<form th:action="@{/history}">
+    <input type="hidden" id="previousMonth" name="previousMonth" value="">
+    <input type="submit" value="前の月" />
+</form>
+<form th:action="@{/history}">
+    <input type="hidden" id="nextMonth" name="nextMonth" value="">
+    <input type="submit" value="次の月" />
+</form>
+
+<div id="error-message" style="color: red;"></div>
+
+<script th:inline="javascript">
+    const stringDate = /*[[${date}]]*/ 'date';
+    var recordList = /*[[${recordList}]]*/ '[]';
+    recordList = JSON.parse(recordList);
+</script>
+
+<div id="calendar"></div>
+
+<script th:src="@{/js/history.js}"></script>
 </body>
 </html>

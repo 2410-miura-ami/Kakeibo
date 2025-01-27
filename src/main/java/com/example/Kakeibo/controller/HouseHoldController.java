@@ -160,6 +160,9 @@ public class HouseHoldController {
         mav.addObject("startDate", startDate);
         mav.addObject("selectBigCategory", selectBigCategory);
 
+        //阿部追加（邪魔になったら教えてください！）
+        mav.addObject("bigCategoryId", bigCategoryId);
+
         //円グラフの配列データを画面にセット
         mav.addObject("expenseLabel", expenseLabel);
         mav.addObject("expenseData", expenseData);
