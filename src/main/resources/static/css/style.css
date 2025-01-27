@@ -101,3 +101,16 @@ header {
    border-top: 3px solid #2d96ff;
  }
 
+.input-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.select-block {
+  margin-bottom: 16px;
+}
+
+select, label {
+  height: 32px;
+  font-size: 14px;
+}

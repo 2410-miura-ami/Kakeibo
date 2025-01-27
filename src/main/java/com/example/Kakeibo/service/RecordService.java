@@ -19,4 +19,6 @@ public class RecordService {
         List<SevenMonthSummary> monthSummaries = recordRepository.findMonthSummaries(loginId, firstDate, lastDate);
         return monthSummaries;
     }
+
+
 }
