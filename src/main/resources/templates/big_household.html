@@ -20,8 +20,17 @@
 </header>
 
 <div class="main-contents mx-auto">
+
+    <div class="alert alert-danger" th:each="errorMessage : ${errorMessages}">
+        <p th:text="${errorMessage}">
+    </div>
+
     <div class="box-left ">
-        <h4 class="d-grid gap-2 col-6 mx-auto displayCenter" th:text="${#dates.format(startDate, 'yyyy年MM月')}"></h4>
+        <div class="display-date">
+            <a th:href="@{/selectMonth(select = -1)}" class="btn btn-outline-secondary">前月</a>
+            <h4 th:text="${#dates.format(startDate, 'yyyy年MM月')}"></h4>
+            <a th:href="@{/selectMonth(select = 1)}" class="btn btn-outline-secondary">翌月</a>
+        </div>
 
         <div class="pie-chart">
 
@@ -43,25 +52,7 @@
                   data: {
                     labels: [[ ${expenseLabel} ]], //変数式で取り出す
                     datasets:[{
-                        backgroundColor: [
-                          "rgb(255, 99, 132)",
-                          "rgb(54, 162, 235)",
-                          "rgb(255, 205, 86)",
-                          "rgb(255, 99, 71)",
-                          "rgb(173, 255, 47)",
-                          "rgb(100, 149, 237)",
-                          "rgb(221, 160, 221)",
-                          "rgb(244, 164, 96)",
-                          "rgb(240, 248, 255)",
-                          "rgb(192, 192, 192)",
-                          "rgb(220, 20, 60)",
-                          "rgb(189, 183, 107)",
-                          "rgb(46, 139, 87)",
-                          "rgb(72, 209, 204)",
-                          "rgb(218, 112, 214)",
-                          "rgb(210, 105, 30)",
-                          "rgb(47, 79, 79)"
-                        ],
+                        backgroundColor: [[${categoryColor}]],
                         data:[[${expenseData}]],  //labelと同様
                     }]
                   },
@@ -110,9 +101,8 @@
                             <span th:text="${expenditureItem.totalAmount + '円'}"></span>
                         </td>
                         <td>
-                            <div class="btn">
-                                <a th:href="@{/houseHold/{bigCategoryId}(bigCategoryId=${expenditureItem.bigCategoryId})}">
-                                    <span>→</span>
+                            <div class="btn btn-arrow-right">
+                                <a th:href="@{/houseHold/{bigCategoryId}(bigCategoryId=${expenditureItem.bigCategoryId})}" class="button02">
                                 </a>
                             </div>
                         </td>
@@ -122,7 +112,13 @@
             </tbody>
         </table>
     </div>
+    <div class="footer">
+        <form th:action="@{/}">
+            <input type="submit" value="戻る" class="btn btn-secondary btn-sm" />
+        </form>
+    </div>
 
 </div>
+
 </body>
 </html>

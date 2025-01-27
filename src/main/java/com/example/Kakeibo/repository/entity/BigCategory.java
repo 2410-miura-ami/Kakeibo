@@ -22,6 +22,9 @@ public class BigCategory {
     private String name;
 
     @Column
+    private String color;
+
+    @Column
     private int bop;
 
     @Column(name = "created_date", insertable = true, updatable = false)

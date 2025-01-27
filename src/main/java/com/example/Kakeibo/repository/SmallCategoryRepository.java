@@ -17,7 +17,8 @@ public interface SmallCategoryRepository extends JpaRepository<SmallCategory, In
             value = "SELECT " +
                     "SUM(records.amount) AS totalAmount, " +
                     "records.small_category_id AS smallCategoryId, " +
-                    "small_categories.name AS name " +
+                    "small_categories.name AS name, " +
+                    "small_categories.color AS color " +
                     "FROM records " +
                     "INNER JOIN small_categories " +
                     "ON records.small_category_id = small_categories.id " +

@@ -13,6 +13,8 @@ public class BigCategoryForm {
 
     private String name;
 
+    private String color;
+
     private int bop;
 
     private Date createdDate;

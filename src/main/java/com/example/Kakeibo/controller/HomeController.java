@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-
 import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -69,33 +68,56 @@ public class HomeController {
         mav.addObject("expenseData", expenseData);
 
         //以下、円グラフ表示処理
-        List<RecordBigCategoryForm> recordBigCategoryFormList = bigCategoryService.findByBigCategory(loginId, firstDate, lastDate);
+        List<RecordBigCategoryForm> recordBigCategoryFormList = bigCategoryService.findByBigCategory(loginUser.getId(), firstDate, lastDate);
         //それぞれのListを作成し、そのListを配列に変換
         List<String> bigCategoryName = new ArrayList<>();
         List<BigDecimal> amountByCategory = new ArrayList<>();
-        for (RecordBigCategoryForm exBigCategory : recordBigCategoryFormList) {
-            bigCategoryName.add(exBigCategory.getName());
-            amountByCategory.add(exBigCategory.getTotalAmount());
+        List<String> color = new ArrayList<>();
+        if (recordBigCategoryFormList != null) {
+            //それぞれのリストに追加
+            for (RecordBigCategoryForm exBigCategory : recordBigCategoryFormList) {
+                bigCategoryName.add(exBigCategory.getName());
+                amountByCategory.add(exBigCategory.getTotalAmount());
+                color.add(exBigCategory.getColor());
+            }
+        } else {
+            bigCategoryName.add("未登録");
+            amountByCategory.add(BigDecimal.valueOf(1));
+            color.add("rgb(245, 245, 245)");
         }
         //配列に変換
         String expenseLabel[] = bigCategoryName.toArray(new String[bigCategoryName.size()]);
         BigDecimal bigCategoryData[] = amountByCategory.toArray(new BigDecimal[amountByCategory.size()]);
+        String categoryColor[] = color.toArray(new String[color.size()]);
+
+        //円グラフの表示のため配列を画面にセット
+        mav.addObject("expenseLabel", expenseLabel);
+        mav.addObject("bigCategoryData", bigCategoryData);
+        mav.addObject("categoryColor", categoryColor);
 
         //支出と収入の総額を取得
-        BigDecimal incomeTotalAmount;//収入
-        BigDecimal expenseTotalAmount;//支出
+        BigDecimal incomeTotalAmount = BigDecimal.valueOf(0);;//収入
+        BigDecimal expenseTotalAmount = BigDecimal.valueOf(0);;//支出
 
         List<RecordBigCategoryForm> recordBopForms = bigCategoryService.findByBop(loginId, firstDate, lastDate);
-        incomeTotalAmount = (!recordBopForms.isEmpty()) ? recordBopForms.get(0).getTotalAmount() : BigDecimal.valueOf(0);
-        expenseTotalAmount = (recordBopForms.size() == 2) ? recordBopForms.get(1).getTotalAmount() : BigDecimal.valueOf(0);
+        //incomeTotalAmount = (!recordBopForms.isEmpty()) ? recordBopForms.get(0).getTotalAmount() : BigDecimal.valueOf(0);
+        //expenseTotalAmount = (recordBopForms.size() == 2) ? recordBopForms.get(1).getTotalAmount() : BigDecimal.valueOf(0);
+        if (recordBopForms != null) {
+            if (recordBopForms.size() == 2) {
+                incomeTotalAmount = recordBopForms.get(0).getTotalAmount();
+                expenseTotalAmount = recordBopForms.get(1).getTotalAmount();
+            } else if (recordBopForms.size() == 1 && recordBopForms.get(0).getId() == 1) {
+                incomeTotalAmount = recordBopForms.get(0).getTotalAmount();
+            } else if (recordBopForms.size() == 1 && recordBopForms.get(0).getId() == 2) {
+                expenseTotalAmount = recordBopForms.get(0).getTotalAmount();
+            }
+        }
+
         mav.addObject("expenditureByBigCategory", recordBigCategoryFormList);
         mav.addObject("incomeTotalAmount", incomeTotalAmount);
         mav.addObject("expenseTotalAmount", expenseTotalAmount);
         mav.addObject("startDate", firstDate);
 
-        //円グラフの表示のため配列を画面にセット
-        mav.addObject("expenseLabel", expenseLabel);
-        mav.addObject("bigCategoryData", bigCategoryData);
         return mav;
     }
 
