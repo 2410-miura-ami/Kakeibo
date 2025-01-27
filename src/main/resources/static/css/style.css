@@ -135,3 +135,16 @@ header {
       transform: rotate(45deg);
       box-sizing: border-box;
 }
+.input-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.select-block {
+  margin-bottom: 16px;
+}
+
+select, label {
+  height: 32px;
+  font-size: 14px;
+}

@@ -8,6 +8,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -48,6 +50,12 @@ public class RecordController {
         mav.addObject("records", results);
         mav.setViewName("/show_record");
 
+        return mav;
+    }
+    @GetMapping("/newRecord")
+    public ModelAndView getNewRecord(){
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("new_record");
         return mav;
     }
 }
