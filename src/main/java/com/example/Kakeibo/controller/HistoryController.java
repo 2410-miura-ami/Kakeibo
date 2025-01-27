@@ -25,9 +25,17 @@ public class HistoryController {
     @Autowired
     RecordService recordService;
 
+    /*
+     * 履歴画面表示処理
+     */
     @GetMapping("/history")
     public ModelAndView selectMonth(@RequestParam(required = false) String nextMonth, @RequestParam(required = false) String previousMonth) throws JsonProcessingException {
         ModelAndView mav = new ModelAndView();
+
+        //ログインユーザ情報を取得
+        //UserForm loginUser = (UserForm) session.getAttribute("loginUser");
+        //Integer loginId = loginUser.getId();
+        Integer loginId = 1;
 
         //現在日時から当月の初日と最終日を算出
         LocalDate today = LocalDate.now();
@@ -49,7 +57,7 @@ public class HistoryController {
         String firstDay = firstDayOfMonth.format(formatter);
         String lastDay = lastDayOfMonth.format(formatter);
 
-        List<RecordHistoryForm> results = recordService.select(firstDay, lastDay);
+        List<RecordHistoryForm> results = recordService.select(firstDay, lastDay, loginId);
 
         ObjectMapper objectMapper = new ObjectMapper();
         String recordListJson = objectMapper.writeValueAsString(results);

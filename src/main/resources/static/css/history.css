@@ -7,10 +7,6 @@ section {
     margin: 10px;
 }
 
-h1 {
-    font-size: 18px;
-}
-
 table {
     border-spacing: 0;
     border-collapse: collapse;
@@ -57,4 +53,11 @@ td.dateLine {
 
 .income {
     color: black;
+}
+
+/*カレンダーの日付セルにホバー効果 */
+.calendar_td:hover {
+    background-color: #f0f0f0;  /* 背景色を変更 */
+    cursor: pointer;  /* カーソルをポインタに変更 */
+    transition: background-color 0.3s ease;  /* 背景色の変化にアニメーションを追加 */
 }

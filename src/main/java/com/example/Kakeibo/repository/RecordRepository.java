@@ -20,10 +20,11 @@ public interface RecordRepository extends JpaRepository<Record, Integer> {
                     "DATE_FORMAT(records.date, '%Y-%m-%d') AS date " +
                     "FROM records " +
                     "WHERE records.date BETWEEN :firstDay AND :lastDay " +
+                    "AND user_id = :loginId " +
                     "GROUP BY records.date " +
                     "ORDER BY records.date ASC" ,
             nativeQuery = true
     )
-    public List<Object[]> select(@Param("firstDay") String firstDay, @Param("lastDay") String lastDay);
+    public List<Object[]> select(@Param("firstDay") String firstDay, @Param("lastDay") String lastDay, @Param("loginId") Integer loginId);
 
 }

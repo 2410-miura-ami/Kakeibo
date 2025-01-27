@@ -45,20 +45,19 @@ function createCalendar(year, month) {
                 calendarHtml += '<td></td>';
                 dayCount++;
             } else {
-                console.log(recordList);
                 const dayData = recordList && recordList.find(item => item.date === `${year}-${String(month).padStart(2, '0')}-${String(dayCount).padStart(2, '0')}`);
                 if(dayData != undefined){
                     let income = dayData.incomeAmount === 0 ? '' : dayData.incomeAmount;
                     let expense = dayData.expenseAmount === 0 ? '' : dayData.expenseAmount;
                     calendarHtml +=
-                        `<td class="calendar_td" data-date="${year}/${month}/${dayCount}">
+                        `<td class="calendar_td" data-date="${year}-${String(month).padStart(2, '0')}-${String(dayCount).padStart(2, '0')}">
                             <p class="day">${dayCount}</p>
                             <p class="income">${income}</p>
                             <p class="expense">${expense}</p>
                         </td>`;
                 }else{
                     calendarHtml +=
-                        `<td class="calendar_td" data-date="${year}/${month}/${dayCount}">
+                        `<td class="calendar_td" data-date="${year}-${String(month).padStart(2, '0')}-${String(dayCount).padStart(2, '0')}">
                             <p class="emptyDay">${dayCount}</p>
                         </td>`;
                 }
@@ -81,18 +80,7 @@ document.addEventListener("click", function(e) {
         formData.append('date', selectedDate);
         
         // 日付をPOSTリクエストで送信
-        fetch('/processDate', {  // 該当のコントローラーのURLに変更
-            method: 'POST',
-            body: formData,  // フォームデータを送信
-        })
-        .then(response => response.json())
-        .then(data => {
-            // レスポンスの処理
-            console.log(data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-        });
+        window.location.href = `/showRecord?date=${encodeURIComponent(selectedDate)}`;
     }
 });
 

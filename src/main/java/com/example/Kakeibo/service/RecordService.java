@@ -19,15 +19,21 @@ public class RecordService {
     @Autowired
     RecordRepository recordRepository;
 
-    public List<RecordHistoryForm> select(String firstDay, String lastDay){
+    /*
+     * 該当月の日付ごとの収入支出別合計を取得（履歴画面の表示）
+     */
+    public List<RecordHistoryForm> select(String firstDay, String lastDay, Integer loginId) {
 
-        List<Object[]> rawData = recordRepository.select(firstDay, lastDay);
+        List<Object[]> rawData = recordRepository.select(firstDay, lastDay, loginId);
         List<RecordHistoryForm> records = objectToForm(rawData);
 
         return records;
     }
 
-    private List<RecordHistoryForm> objectToForm(List<Object[]> rawData){
+    /*
+     * object型のクエリ結果をFormに変換（履歴画面の表示）
+     */
+    private List<RecordHistoryForm> objectToForm(List<Object[]> rawData) {
 
         List<RecordHistoryForm> result = new ArrayList<>();
         for (Object[] row : rawData) {
@@ -45,4 +51,8 @@ public class RecordService {
         return result;
     }
 
+
+
+
 }
+
