@@ -1,0 +1,204 @@
+body {
+	background-color: #E0FFFF;
+	margin-left: 20px;
+	margin-right: 20px;
+}
+
+.table {
+    border-collapse: collapse;
+    border-top : 1px solid #ddd;
+    border-bottom : 1px solid #ccc;
+}
+/*
+table.log-table {
+  counter-reset: rowCount;
+}
+
+table.log-table > tbody > tr {
+  counter-increment: rowCount;
+}
+
+table.log-table > tbody > tr > td:first-child::before {
+  content: counter(rowCount);
+}
+*/
+
+.table:empty {
+    border-collapse: collapse;
+    border-top : 1px solid #ddd;
+    border-bottom : 1px solid #ccc;
+}
+
+.header-contents {
+    margin-top : 1.5rem;
+    margin-bottom : 1.5rem;
+}
+
+.header {
+	text-align: right;
+}
+
+.main-contents {
+    width : 500px;
+}
+
+.errorMessages {
+    color : red;
+    font-size : 14px;
+}
+
+.alert-danger{
+    height: 50px;
+}
+
+.header-item {
+    display : inline-block;
+}
+
+.new-button {
+    text-align: left;
+}
+
+.table-systemManage tr{
+    border-bottom : 1px solid #ccc;
+    height : 50px;
+}
+
+.table-systemManage tr th {
+    width : 15%;
+    text-align : left;
+    background-color : #ddd;
+    padding-left : 2em;
+}
+
+.table-systemManage tr td{
+    background-color : #fff;
+    padding-left : 2em;
+}
+
+.table-newUser {
+    width : 500px;
+    margin : 0 auto;
+}
+
+.table-newUser tr {
+    border-bottom : 1px solid #ccc;
+    height : 40px;
+}
+
+.table-newUser tr th{
+    text-align : left;
+    background-color : #ddd;
+    padding-left : 2em;
+    padding-right : 2em;
+}
+
+.table-newUser tr td{
+    background-color : #fff;
+    padding-left : 2em;
+    padding-right : 2em;
+}
+
+.isStopped-button {
+    display : inline-block;
+}
+.revival-button {
+    display : inline-block;
+}
+
+.stop-now {
+    color : red;
+    opacity : 0.7;
+}
+
+.return-button {
+    margin-top : 20px;
+}
+
+.return-button-all {
+    margin-bottom : 20px;
+}
+
+.update-button {
+    width : 120px;
+    margin-bottom : 20px;
+    margin-top : 20px;
+}
+
+.newUser-button {
+    margin-bottom : 20px;
+}
+
+.setting-password {
+    width : 200px;
+}
+
+.employee_number {
+    margin : 20px 0 20px 0;
+    font-weight : bold;
+}
+.selectMonthForm{
+    display : inline-block;
+}
+
+.selectMonth {
+    width : 300px;
+    display : inline-block;
+}
+
+.prevMonth{
+    margin : 0 10px 0 20px;
+}
+
+.saturday{
+    color : blue;
+}
+
+.holiday{
+    color : red;
+}
+
+/*ページネーション追加*/
+.PageNumWrap {
+  margin-bottom: 10px;
+}
+.PageNum {
+  margin-right: 10px;
+  cursor: pointer;
+  color: #0000ff;
+}
+.PageNum:hover {
+  border-bottom: 1px solid #0000ff;
+}
+.PageNum:last-child {
+  margin-right: 0;
+}
+.PageNum.-currentPage {
+  color: #000;
+  cursor: auto;
+}
+.PageNum.-currentPage:hover {
+  color: inherit;
+  border: none;
+}
+.PageNum.-dots {
+  color: #000;
+}
+.PageNum.-dots:hover {
+  color: #000;
+  border: none;
+  cursor: auto;
+}
+
+.log-number {
+    width : 5%;
+}
+.log-date {
+    width : 10%;
+}
+.log-content {
+    width : 70%;
+}
+.log-update {
+    width : 15%;
+}

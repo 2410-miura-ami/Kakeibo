@@ -1,6 +1,7 @@
 package com.example.Kakeibo.controller;
 
 import com.example.Kakeibo.controller.form.UserForm;
+import com.example.Kakeibo.repository.entity.SevenMonthSummary;
 import com.example.Kakeibo.service.RecordService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,10 +9,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 @Controller
 //ホーム画面の表示を行うコントローラー
@@ -36,8 +39,15 @@ public class HomeController {
         Date firstDate = getFirstDate(displayDate);
         Date lastDate = getLastDate(displayDate);
 
-        //recordService.selectAmount7Month(firstDate, lastDate);
+        List<SevenMonthSummary> monthSummaries = recordService.findMonthSummaries(firstDate, lastDate);
+        mav.addObject("monthSummaries", monthSummaries);
 
+        String monthLabel[] = monthSummaries.stream().map(SevenMonthSummary::getMonth).toArray(String[]::new);
+        BigDecimal incomeData[] = monthSummaries.stream().map(SevenMonthSummary::getIncomeTotalAmount).toArray(BigDecimal[]::new);
+        BigDecimal expenseData[] = monthSummaries.stream().map(SevenMonthSummary::getExpenseTotalAmount).toArray(BigDecimal[]::new);
+        mav.addObject("monthLabel", monthLabel);
+        mav.addObject("incomeData", incomeData);
+        mav.addObject("expenseData", expenseData);
         return mav;
     }
 
