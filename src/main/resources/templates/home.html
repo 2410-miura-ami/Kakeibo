@@ -21,6 +21,9 @@
             <button type="submit" class="btn btn-outline-secondary me-3">ログアウト</button>
         </form>
     </header>
+    <form th:action="@{/newRecord}">
+        <input type="submit" value="新規登録" class="btn btn-secondary newUser-button"/>
+    </form>
     <div class="main-contents">
         <div class="bar-chart ">
             <h4 class="d-grid gap-2 col-6 mx-auto displayCenter">月別収支額</h4>

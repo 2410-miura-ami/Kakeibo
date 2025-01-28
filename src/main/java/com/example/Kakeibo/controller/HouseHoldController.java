@@ -176,6 +176,10 @@ public class HouseHoldController {
         String end = sdf.format(calender.getTime());
         Date endDate = sdf.parse(end);
 
+        //阿部追加（邪魔になったら教えてください！）
+        session.setAttribute("startDate", startDate);
+        session.setAttribute("endDate", endDate);
+
         //支出の小カテゴリ別記録情報（小カテゴリ名・金額総額）を取得
         List<RecordSmallCategoryForm> recordSmallCategoryFormList = smallCategoryService.findBySmallCategory(loginId, startDate, endDate, bigCategoryId);
 

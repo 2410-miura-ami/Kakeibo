@@ -35,11 +35,21 @@ public class BigSmallCategoryService {
     /*
      * 指定の小カテゴリの全記録を取得（個別記録画面の表示）
      */
-    public List<BigSmallCategoryForm> select(Integer loginId, Integer smallCategoryId) {
-        List<Object[]> records = bigSmallCategoryRepository.select(loginId, smallCategoryId);
+    public List<BigSmallCategoryForm> select(Integer loginId, Integer smallCategoryId, Date startDate, Date endDate) {
+        List<Object[]> records = bigSmallCategoryRepository.select(loginId, smallCategoryId, startDate, endDate);
         List<BigSmallCategoryForm> results = objectToForm(records);
 
         return results;
+    }
+
+    /*
+     * idを元に記録を取得（記録編集画面の表示）
+     */
+    public BigSmallCategoryForm select(Integer id) {
+        List<Object[]> records = bigSmallCategoryRepository.select(id);
+        List<BigSmallCategoryForm> results = objectToForm(records);
+
+        return results.get(0);
     }
 
     /*

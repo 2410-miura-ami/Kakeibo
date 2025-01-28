@@ -10,17 +10,16 @@
 <body>
 <header>
     <h1>Kakeibo</h1>
-    <div th:if="${back} == 'history'" >
+    <div th:if="${landmark} == 'history'" >
         <form th:action="@{/history}" method="get">
             <button type="submit" class="btn btn-outline-secondary me-3">戻る</button>
         </form>
     </div>
-    <div th:if="${back} == 'houseHold'" >
+    <div th:if="${landmark} == 'houseHold'" >
         <form th:action="@{/houseHold/{id}(id=${bigCategoryId})}" method="get">
             <button type="submit" class="btn btn-outline-secondary me-3">戻る</button>
         </form>
     </div>
-
 </header>
 
 <table class="table table-hover">
@@ -31,6 +30,7 @@
         <th>小カテゴリ</th>
         <th>金額</th>
         <th>メモ</th>
+        <th>　</th>
     </tr>
     </thead>
     <tbody>
@@ -40,6 +40,11 @@
         <td th:text="${record.smallCategoryName}"></td>
         <td th:text="${record.amount}"></td>
         <td th:text="${record.memo}"></td>
+        <td>
+            <form th:action="@{editRecord/{id}(id=${record.id})}">
+                <button type="submit" class="btn btn-outline-primary me-3">編集</button>
+            </form>
+        </td>
     </tr>
     </tbody>
 </table>
