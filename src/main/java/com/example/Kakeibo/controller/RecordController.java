@@ -9,11 +9,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.ArrayList;
@@ -27,6 +25,9 @@ public class RecordController {
 
     @Autowired
     BigSmallCategoryService bigSmallCategoryService;
+
+    @Autowired
+    RecordService recordService;
 
     @Autowired
     HttpSession session;
@@ -92,7 +93,7 @@ public class RecordController {
     public ModelAndView getEditRecord(@PathVariable Integer id){
         ModelAndView mav = new ModelAndView();
 
-        BigSmallCategoryForm result = bigSmallCategoryService.select(id);
+        RecordForm result = recordService.select(id);
 
         //セッションから遷移元画面の識別子を取得
         String landmark = (String)session.getAttribute("landmark");
@@ -106,6 +107,20 @@ public class RecordController {
         mav.addObject("record", result);
         mav.addObject("landmark", landmark);
         mav.setViewName("edit_record");
+        return mav;
+    }
+
+    /*
+     * 記録編集処理
+     */
+    @PostMapping("/updateRecord")
+    public ModelAndView getEditRecord(@ModelAttribute RecordForm recordForm){
+        ModelAndView mav = new ModelAndView();
+
+        Integer id = recordForm.getId();
+        recordService.update(recordForm, id);
+
+        mav.setViewName("/");
         return mav;
     }
 }

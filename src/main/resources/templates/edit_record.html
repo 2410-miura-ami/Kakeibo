@@ -36,8 +36,8 @@
     <form th:method="put" th:action="@{/newUser}" th:object="${user}" class="text-center" >
         <script th:inline="javascript">
             const bop = /*[[${record.bop}]]*/ 'bop';
-            const bigCategoryName = /*[[${record.bigCategoryName}]]*/ 'bigCategoryName';
-            const smallCategoryName = /*[[${record.smallCategoryName}]]*/ 'smallCategoryName';
+            const bigCategoryId = /*[[${record.bigCategoryId}]]*/ 'bigCategoryId';
+            const smallCategoryId = /*[[${record.smallCategoryId}]]*/ 'smallCategoryId';
         </script>
         <div class="input-block">
             <div class="select-block">
@@ -51,6 +51,7 @@
                         <option>選択してください</option>
                     </select>
                 </label>
+                <input type="hidden" id="hidden-category" name="category" />
             </div>
             <div class="select-block">
                 <label>大カテゴリー：
@@ -58,6 +59,7 @@
                         <option>選択してください</option>
                     </select>
                 </label>
+                <input type="hidden" id="hidden-big-category" name="bigCategoryId" />
             </div>
             <div class="select-block">
                 <label>小カテゴリー：
@@ -65,6 +67,7 @@
                         <option>選択してください</option>
                     </select>
                 </label>
+                <input type="hidden" id="hidden-small-category" name="smallCategoryId" />
             </div>
             <div class="select-block">
                 <label>金額：

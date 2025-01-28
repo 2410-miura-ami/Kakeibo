@@ -44,8 +44,8 @@ public interface BigSmallCategoryRepository extends JpaRepository<BigSmallCatego
             "SELECT " +
                     "records.id AS id, " +
                     "CAST(DATE_FORMAT(records.date, '%Y-%m-%d') AS CHAR) AS date, " +
-                    "small_categories.name AS smallCategoryName, " +
                     "big_categories.name AS bigCategoryName, " +
+                    "small_categories.name AS smallCategoryName, " +
                     "records.amount AS amount, " +
                     "records.bop AS bop, " +
                     "records.memo AS memo, " +
@@ -70,8 +70,8 @@ public interface BigSmallCategoryRepository extends JpaRepository<BigSmallCatego
             "SELECT " +
                     "records.id AS id, " +
                     "CAST(DATE_FORMAT(records.date, '%Y-%m-%d') AS CHAR) AS date, " +
-                    "small_categories.name AS smallCategoryName, " +
                     "big_categories.name AS bigCategoryName, " +
+                    "small_categories.name AS smallCategoryName, " +
                     "records.amount AS amount, " +
                     "records.bop AS bop, " +
                     "records.memo AS memo, " +

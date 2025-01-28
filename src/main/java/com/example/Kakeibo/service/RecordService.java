@@ -1,5 +1,6 @@
 package com.example.Kakeibo.service;
 
+import com.example.Kakeibo.controller.form.BigSmallCategoryForm;
 import com.example.Kakeibo.repository.RecordRepository;
 import com.example.Kakeibo.repository.entity.SevenMonthSummary;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,7 +37,7 @@ public class RecordService {
     public List<RecordHistoryForm> select(String firstDay, String lastDay, Integer loginId) {
 
         List<Object[]> rawData = recordRepository.select(firstDay, lastDay, loginId);
-        List<RecordHistoryForm> records = objectToForm(rawData);
+        List<RecordHistoryForm> records = objectToForm1(rawData);
 
         return records;
     }
@@ -44,7 +45,7 @@ public class RecordService {
     /*
      * object型のクエリ結果をFormに変換（履歴画面の表示）
      */
-    private List<RecordHistoryForm> objectToForm(List<Object[]> rawData) {
+    private List<RecordHistoryForm> objectToForm1(List<Object[]> rawData) {
 
         List<RecordHistoryForm> result = new ArrayList<>();
         for (Object[] row : rawData) {
@@ -60,6 +61,54 @@ public class RecordService {
             result.add(recordHistoryForm);
         }
         return result;
+    }
+
+    /*
+     * idを元に記録を取得（記録編集画面の表示）
+     */
+    public RecordForm select(Integer id) {
+
+        List<Object[]> records = recordRepository.select(id);
+        List<RecordForm> results = objectToForm2(records);
+
+        return results.get(0);
+    }
+
+    /*
+     * EntityをFormに変換（個別記録画面の表示）
+     */
+    private List<RecordForm> objectToForm2(List<Object[]> records) {
+
+        List<RecordForm> results = new ArrayList<>();
+
+        for (Object[] record : records) {
+            RecordForm result = new RecordForm();
+            int id = (int) record[0];
+            String date = (String) record[1];
+            Integer bigCategoryId = (Integer) record[2];
+            Integer smallCategoryId = (Integer) record[3];
+            int amount = (int) record[4];
+            Integer bop = (Integer) record[5];
+            String memo = (String) record[6];
+            Integer userId = (Integer) record[7];
+            Date createdDate = (Date) record[8];
+            Date updatedDate = (Date) record[9];
+
+            result.setId(id);
+            result.setDate(date);
+            result.setBigCategoryId(bigCategoryId);
+            result.setSmallCategoryId(smallCategoryId);
+            result.setAmount(amount);
+            result.setBop(bop);
+            result.setMemo(memo);
+            result.setUserId(userId);
+            result.setCreatedDate(createdDate);
+            result.setUpdatedDate(updatedDate);
+
+            results.add(result);
+        }
+
+        return results;
     }
 
 

@@ -14,7 +14,7 @@ public class RecordForm {
 
     private int amount;
 
-    private int bop;
+    private Integer bop;
 
     private int smallCategoryId;
 

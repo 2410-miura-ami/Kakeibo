@@ -53,4 +53,22 @@ public interface RecordRepository extends JpaRepository<Record, Integer> {
     )
     public List<Object[]> select(@Param("firstDay") String firstDay, @Param("lastDay") String lastDay, @Param("loginId") Integer loginId);
 
+    @Transactional
+    @Query(value =
+            "SELECT " +
+                    "records.id AS id, " +
+                    "CAST(DATE_FORMAT(records.date, '%Y-%m-%d') AS CHAR) AS date, " +
+                    "records.big_category_id AS bigCategoryId, " +
+                    "records.small_category_id AS smallCategoryId, " +
+                    "records.amount AS amount, " +
+                    "records.bop AS bop, " +
+                    "records.memo AS memo, " +
+                    "records.user_id AS userId, " +
+                    "records.created_date AS createdDate, " +
+                    "records.updated_date AS updatedDate " +
+                    "FROM records " +
+                    "WHERE records.id = :id " ,
+            nativeQuery = true
+    )
+    List<Object[]> select(@Param("id")Integer id);
 }
