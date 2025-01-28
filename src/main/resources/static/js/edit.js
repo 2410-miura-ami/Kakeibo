@@ -6,15 +6,15 @@ const categories = [
 
 // 小分類と商品名は、それぞれ一つ前の選択肢と紐付けるためにオブジェクト型を使う
 const subCategories = [
-  {category: '収入', name: '給与所得', value: '1'},
-  {category: '収入', name: 'その他（収入）', value: '2'},
-  {category: '支出', name: '食費', value: '3'},
-  {category: '支出', name: '日用品', value: '4'},
-  {category: '支出', name: '交通費', value: '5'},
-  {category: '支出', name: '交際費', value: '6'},
-  {category: '支出', name: '水道光熱費', value: '7'},
-  {category: '支出', name: '住宅', value: '8'},
-  {category: '支出', name: 'その他（支出）', value: '9'}
+  {category: '収入', name: '給与所得'},
+  {category: '収入', name: 'その他（収入）'},
+  {category: '支出', name: '食費'},
+  {category: '支出', name: '日用品'},
+  {category: '支出', name: '交通費'},
+  {category: '支出', name: '交際費'},
+  {category: '支出', name: '水道光熱費'},
+  {category: '支出', name: '住宅'},
+  {category: '支出', name: 'その他（支出）'}
 ];
 
 const products = [
@@ -69,12 +69,62 @@ const categorySelect3 = document.getElementById('category-select-3');
 const subCategorySelect3 = document.getElementById('sub-category-select-3');
 const productSelect = document.getElementById('product-select');
 
+//デフォルト値を既存の記録から設定
+const defaultCategory = (bop === '1') ? '収入' : "支出";
+const defaultSubCategory = bigCategoryName;
+const defaultProduct = smallCategoryName;
+
+
 // 大分類のプルダウンを生成
 categories.forEach(category => {
   const option = document.createElement('option');
   option.textContent = category;
 
+　//デフォルト値と合致する場合にselected要素を追加
+  if (category === defaultCategory) {
+      option.selected = true;
+    }
+
   categorySelect3.appendChild(option);
+});
+
+
+// 小分類のプルダウンの選択肢を全て削除し、選択（クリック）できるようにする
+optionClear('#sub-category-select-3 > option');
+subCategorySelect3.disabled = false;
+
+// 大分類で選択されたカテゴリーと同じ小分類のみを、プルダウンの選択肢に設定する
+subCategories.forEach(subCategory => {
+  if (categorySelect3.value === subCategory.category) {
+    const option = document.createElement('option');
+    option.textContent = subCategory.name;
+
+    //デフォルト値と合致する場合にselected要素を追加
+    if (subCategory.category === defaultSubCategory) {
+      option.selected = true;
+    }
+
+  subCategorySelect3.appendChild(option);
+  }
+});
+
+// 商品のプルダウンの選択肢を全て削除し、選択（クリック）できるようにする
+optionClear('#product-select > option');
+productSelect.disabled = false;
+
+// 小分類で選択されたカテゴリーと同じ商品のみを、プルダウンの選択肢に設定する
+products.forEach(product => {
+  if (subCategorySelect3.value == product.subCategory) {
+    const option = document.createElement('option');
+    option.textContent = product.name;
+
+    //デフォルト値と合致する場合にselected要素を追加
+    if (product === defaultProduct) {
+        option.selected = true;
+    }
+
+    productSelect.appendChild(option);
+  }
 });
 
 // 大分類が選択されたら小分類のプルダウンを生成
@@ -126,7 +176,6 @@ subCategorySelect3.addEventListener('input', () => {
     if (subCategorySelect3.value == product.subCategory) {
       const option = document.createElement('option');
       option.textContent = product.name;
-      option.value = product.value;
 
       productSelect.appendChild(option);
     }

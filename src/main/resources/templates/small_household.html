@@ -22,6 +22,11 @@
 </header>
 
 <div class="main-contents mx-auto">
+
+    <div class="alert alert-danger" th:each="errorMessage : ${errorMessages}">
+        <p th:text="${errorMessage}">
+    </div>
+
     <div class="box-left ">
         <div class="display-date">
             <a th:href="@{/smallCategory/selectMonth(select = -1, bigCategoryId = ${selectBigCategory.get(0).bigCategoryId})}" class="btn btn-outline-secondary">前月</a>
@@ -86,7 +91,6 @@
                     <td>
                         <div class="btn btn-arrow-right">
                             <a th:href="@{/showRecord?smallCategoryId={smallCategoryId}(smallCategoryId=${expenditureItem.smallCategoryId})}">
-                                <input name="bidCategoryId" th:value="${bigCategoryId}" type="hidden"/>
                             </a>
                         </div>
                     </td>

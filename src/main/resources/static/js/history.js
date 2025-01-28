@@ -54,6 +54,11 @@ function createCalendar(year, month) {
                             <p class="day">${dayCount}</p>
                             <p class="income">${income}</p>
                             <p class="expense">${expense}</p>
+                            <form action="/showRecord" method="get" class="btnn btnn-arrow-right">
+                                <input type="hidden" name="date" value="${year}-${String(month).padStart(2, '0')}-${String(dayCount).padStart(2, '0')}">
+                                    <button type="submit"/>
+                                </input>
+                            </form>
                         </td>`;
                 }else{
                     calendarHtml +=
@@ -70,18 +75,5 @@ function createCalendar(year, month) {
 
     return calendarHtml;
 }
-
-document.addEventListener("click", function(e) {
-    if (e.target.classList.contains("calendar_td")) {
-        const selectedDate = e.target.dataset.date;
-        
-        // コントローラーに渡すフォームデータを作成
-        const formData = new FormData();
-        formData.append('date', selectedDate);
-        
-        // 日付をPOSTリクエストで送信
-        window.location.href = `/showRecord?date=${encodeURIComponent(selectedDate)}`;
-    }
-});
 
 showCalendar(year, month);

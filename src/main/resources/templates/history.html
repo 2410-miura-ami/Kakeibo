@@ -23,13 +23,13 @@
     <p th:text="${errorMessage}"></p>
 </div>
 
-<form th:action="@{/history}">
+<form th:action="@{/history}" class="form">
     <input type="hidden" id="previousMonth" name="previousMonth" value="">
-    <input type="submit" value="前の月" />
+    <input type="submit" value="前の月" class="btn btn-outline-secondary me-3"/>
 </form>
-<form th:action="@{/history}">
+<form th:action="@{/history}" class="form">
     <input type="hidden" id="nextMonth" name="nextMonth" value="">
-    <input type="submit" value="次の月" />
+    <input type="submit" value="次の月" class="btn btn-outline-secondary me-3"/>
 </form>
 
 <div id="error-message" style="color: red;"></div>

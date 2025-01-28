@@ -153,10 +153,14 @@ public class HouseHoldController {
             return new ModelAndView("redirect:/houseHold");
         }
 
-
         //ログインユーザ情報を取得
         UserForm loginUser = (UserForm) session.getAttribute("loginUser");
         Integer loginId = loginUser.getId();
+
+        //エラーメッセージの取得と表示
+        errorMessages = (List<String>)session.getAttribute("errorMessages");
+        mav.addObject("errorMessages", errorMessages);
+        session.removeAttribute("errorMessages");
 
         //表示月の取得
         Calendar calender = Calendar.getInstance();
@@ -175,6 +179,10 @@ public class HouseHoldController {
         //Date型のフォーマット揃える
         String end = sdf.format(calender.getTime());
         Date endDate = sdf.parse(end);
+
+        //阿部追加（邪魔になったら教えてください！）
+        session.setAttribute("startDate", startDate);
+        session.setAttribute("endDate", endDate);
 
         //支出の小カテゴリ別記録情報（小カテゴリ名・金額総額）を取得
         List<RecordSmallCategoryForm> recordSmallCategoryFormList = smallCategoryService.findBySmallCategory(loginId, startDate, endDate, bigCategoryId);
@@ -209,7 +217,7 @@ public class HouseHoldController {
         mav.addObject("selectBigCategory", selectBigCategory);
 
         //阿部追加（邪魔になったら教えてください！）
-        mav.addObject("bigCategoryId", bigCategoryId);
+        session.setAttribute("bigCategoryId", bigCategoryId);
 
         //円グラフの配列データを画面にセット
         mav.addObject("expenseLabel", expenseLabel);

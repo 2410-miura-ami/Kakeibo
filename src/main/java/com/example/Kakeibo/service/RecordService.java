@@ -1,7 +1,11 @@
 package com.example.Kakeibo.service;
 
+import com.example.Kakeibo.controller.form.UserForm;
 import com.example.Kakeibo.repository.RecordRepository;
 import com.example.Kakeibo.repository.entity.SevenMonthSummary;
+import jakarta.servlet.http.HttpSession;
+import org.hibernate.Session;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.example.Kakeibo.controller.form.RecordForm;
 import com.example.Kakeibo.controller.form.RecordHistoryForm;
@@ -24,6 +28,8 @@ public class RecordService {
 
     @Autowired
     RecordRepository recordRepository;
+    @Autowired
+    HttpSession session;
 
     public List<SevenMonthSummary> findMonthSummaries(Integer loginId, Date firstDate, Date lastDate){
         List<SevenMonthSummary> monthSummaries = recordRepository.findMonthSummaries(loginId, firstDate, lastDate);
@@ -62,6 +68,64 @@ public class RecordService {
         return result;
     }
 
+    public void insert(RecordForm reqRecord){
+        RecordForm recordForm = setBop(reqRecord);
+        Record record = setRecordEntity(recordForm);
+        recordRepository.save(record);
+    }
+
+    private Record setRecordEntity(RecordForm reqRecord){
+        Record record = new Record();
+        BeanUtils.copyProperties(reqRecord, record);
+        return record;
+    }
+
+    private RecordForm setBop(RecordForm reqRecord){
+        UserForm loginUser = (UserForm) session.getAttribute("loginUser");
+        Integer loginId = loginUser.getId();
+        reqRecord.setUserId(loginId);
+        switch (reqRecord.getSmallCategoryId()) {
+            case 1,2:
+                reqRecord.setBop(1);
+                reqRecord.setBigCategoryId(1);
+                break;
+            case 3,4:
+                reqRecord.setBop(1);
+                reqRecord.setBigCategoryId(2);
+                break;
+            case 5,6,7:
+                reqRecord.setBop(2);
+                reqRecord.setBigCategoryId(3);
+                break;
+            case 8,9,10,11:
+                reqRecord.setBop(2);
+                reqRecord.setBigCategoryId(4);
+                break;
+            case 12,13,14,15:
+                reqRecord.setBop(2);
+                reqRecord.setBigCategoryId(5);
+                break;
+            case 16,17,18,19:
+                reqRecord.setBop(2);
+                reqRecord.setBigCategoryId(6);
+                break;
+            case 20,21,22,23:
+                reqRecord.setBop(2);
+                reqRecord.setBigCategoryId(7);
+                break;
+            case 24,25,26,27,28:
+                reqRecord.setBop(2);
+                reqRecord.setBigCategoryId(8);
+                break;
+            case 29:
+                reqRecord.setBop(2);
+                reqRecord.setBigCategoryId(9);
+                break;
+            default:
+                break;
+        }
+        return reqRecord;
+    }
 
 }
 

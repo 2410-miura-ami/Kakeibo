@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -57,8 +58,32 @@ public interface BigSmallCategoryRepository extends JpaRepository<BigSmallCatego
                     "ON records.big_category_id = big_categories.id " +
                     "WHERE records.small_category_id = :smallCategoryId " +
                     "AND records.user_id = :loginId " +
+                    "AND records.date BETWEEN :startDate AND :endDate " +
                     "ORDER BY records.date DESC",
             nativeQuery = true
     )
-    List<Object[]> select(@Param("loginId")Integer loginId, @Param("smallCategoryId")Integer smallCategoryId);
+    List<Object[]> select(@Param("loginId")Integer loginId, @Param("smallCategoryId")Integer smallCategoryId,
+                          @Param("startDate") Date startDate, @Param("endDate")Date endDate);
+
+    @Transactional
+    @Query(value =
+            "SELECT " +
+                    "records.id AS id, " +
+                    "CAST(DATE_FORMAT(records.date, '%Y-%m-%d') AS CHAR) AS date, " +
+                    "small_categories.name AS smallCategoryName, " +
+                    "big_categories.name AS bigCategoryName, " +
+                    "records.amount AS amount, " +
+                    "records.bop AS bop, " +
+                    "records.memo AS memo, " +
+                    "records.created_date AS createdDate, " +
+                    "records.updated_date AS updatedDate " +
+                    "FROM records " +
+                    "INNER JOIN small_categories " +
+                    "ON records.small_category_id = small_categories.id " +
+                    "INNER JOIN big_categories " +
+                    "ON records.big_category_id = big_categories.id " +
+                    "WHERE records.id = :id " ,
+            nativeQuery = true
+    )
+    List<Object[]> select(@Param("id")Integer id);
 }
