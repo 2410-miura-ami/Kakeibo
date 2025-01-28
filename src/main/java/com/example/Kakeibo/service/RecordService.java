@@ -68,18 +68,27 @@ public class RecordService {
         return result;
     }
 
+    /*
+     * 新規記録登録処理
+     */
     public void insert(RecordForm reqRecord){
         RecordForm recordForm = setBop(reqRecord);
         Record record = setRecordEntity(recordForm);
         recordRepository.save(record);
     }
 
+    /*
+     * エンティティに変換
+     */
     private Record setRecordEntity(RecordForm reqRecord){
         Record record = new Record();
         BeanUtils.copyProperties(reqRecord, record);
         return record;
     }
 
+    /*
+     * 小カテゴリID、BOP、ログインユーザIDをつめる
+     */
     private RecordForm setBop(RecordForm reqRecord){
         UserForm loginUser = (UserForm) session.getAttribute("loginUser");
         Integer loginId = loginUser.getId();
