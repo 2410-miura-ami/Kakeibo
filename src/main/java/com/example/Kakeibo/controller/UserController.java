@@ -1,11 +1,14 @@
 package com.example.Kakeibo.controller;
 
 import com.example.Kakeibo.controller.form.UserForm;
+import com.example.Kakeibo.repository.entity.User;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import com.example.Kakeibo.service.UserService;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -59,7 +62,7 @@ public class UserController {
         List<String> errorMessages = new ArrayList<String>();
         //社員番号入力チェック
         if (email.isBlank()) {
-            errorMessages.add("・社員番号を入力してください");
+            errorMessages.add("・メールアドレスを入力してください");
         }
         //パスワード入力チェック
         if (password.isBlank()) {
@@ -104,4 +107,85 @@ public class UserController {
         //ログイン画面にリダイレクト
         return new ModelAndView("redirect:/login");
     }
+
+    /*
+     * ユーザ登録画面表示
+     */
+    @GetMapping("/signup")
+    public ModelAndView signup() {
+        ModelAndView mav = new ModelAndView();
+
+        UserForm userForm = new UserForm();
+        mav.addObject("user", userForm);
+
+        mav.setViewName("/sign_up");
+        return mav;
+    }
+
+    /*
+     * ユーザ登録処理
+     */
+    @PostMapping("/signup")
+    public ModelAndView newUser(@ModelAttribute("user") @Validated UserForm userForm, BindingResult result) {
+        ModelAndView mav = new ModelAndView();
+
+        //バリデーションチェック
+        List<String> errorMessages = new ArrayList<>();
+
+        if (userForm.getName().isBlank()) {
+            errorMessages.add("・氏名を入力してください");
+        }
+        if (userForm.getEmail().isBlank()) {
+            errorMessages.add("・メールアドレスを入力してください");
+        }
+        if (userForm.getPassword().isBlank()) {
+            errorMessages.add("・パスワードを入力してください");
+        }
+
+        if(result.hasErrors()) {
+            //エラーがあったら、エラーメッセージを格納する
+            //エラーメッセージの取得
+            for (FieldError error : result.getFieldErrors()) {
+                String message = error.getDefaultMessage();
+                //取得したエラーメッセージをエラーメッセージのリストに格納
+                errorMessages.add(message);
+            }
+        }
+
+        //妥当性チェック　パスワードと確認用パスワードが同一か
+        if (!userForm.getPassword().equals(userForm.getPasswordConfirmation())){
+            errorMessages.add("・パスワードと確認用パスワードが一致しません");
+        }
+
+        //重複チェック
+        if(!userForm.getEmail().isBlank()) {
+            UserForm selectedEmail = userService.findByEmail(userForm.getEmail());
+            if (selectedEmail != null){
+                errorMessages.add("・メールアドレスが重複しています");
+            }
+        }
+
+        if(!errorMessages.isEmpty()) {
+            //エラーメッセージに値があれば、エラーメッセージを画面にバインド
+            mav.addObject("errorMessages", errorMessages);
+
+            //入力情報の保持
+            mav.addObject("user", userForm);
+            mav.setViewName("/sign_up");
+            return mav;
+        }
+
+        //リクエストから取得したパスワードの暗号化
+        String encodedPwd = BCrypt.hashpw(userForm.getPassword(), BCrypt.gensalt());
+        //登録するパスワードを暗号化したパスワードに変更
+        userForm.setPassword(encodedPwd);
+
+        //登録処理
+        userService.saveUser(userForm);
+
+        //ログイン画面へリダイレクト
+        return new ModelAndView("redirect:/login");
+
+    }
+
 }

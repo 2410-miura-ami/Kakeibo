@@ -90,7 +90,7 @@ public class HouseHoldController {
         } else {
             bigCategoryName.add("未登録");
             amountByCategory.add(BigDecimal.valueOf(1));
-            color.add("rgb(245, 245, 245)");
+            color.add("rgb(240, 240, 240)");
         }
         //配列に変換
         String expenseLabel[] = bigCategoryName.toArray(new String[bigCategoryName.size()]);
@@ -193,7 +193,7 @@ public class HouseHoldController {
         } else {
             smallCategoryName.add("未登録");
             amountByCategory.add(BigDecimal.valueOf(1));
-            color.add("rgb(245, 245, 245)");
+            color.add("rgb(240, 240, 240)");
         }
         //配列に変換
         String expenseLabel[] = smallCategoryName.toArray(new String[smallCategoryName.size()]);

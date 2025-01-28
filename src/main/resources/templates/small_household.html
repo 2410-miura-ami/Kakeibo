@@ -93,6 +93,14 @@
                 </tr>
 
             </div>
+
+            <div th:if="${expenditureBySmallCategory == null}">
+                <tr>
+                    <td th:text="登録がありません" style="color : #aaa"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </div>
             </tbody>
         </table>
 

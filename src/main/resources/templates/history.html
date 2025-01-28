@@ -19,6 +19,10 @@
     </form>
 </header>
 
+<div class="alert alert-danger" th:each="errorMessage : ${errorMessages}">
+    <p th:text="${errorMessage}"></p>
+</div>
+
 <form th:action="@{/history}">
     <input type="hidden" id="previousMonth" name="previousMonth" value="">
     <input type="submit" value="前の月" />

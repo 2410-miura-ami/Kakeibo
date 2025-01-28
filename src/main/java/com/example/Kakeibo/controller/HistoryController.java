@@ -5,6 +5,7 @@ import com.example.Kakeibo.controller.form.RecordHistoryForm;
 import com.example.Kakeibo.service.RecordService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +26,9 @@ public class HistoryController {
     @Autowired
     RecordService recordService;
 
+    @Autowired
+    HttpSession session;
+
     /*
      * 履歴画面表示処理
      */
@@ -36,6 +40,11 @@ public class HistoryController {
         //UserForm loginUser = (UserForm) session.getAttribute("loginUser");
         //Integer loginId = loginUser.getId();
         Integer loginId = 1;
+
+        //エラーメッセージの取得と表示
+        List<String> errorMessages = (List<String>)session.getAttribute("errorMessages");
+        mav.addObject("errorMessages", errorMessages);
+        session.removeAttribute("errorMessages");
 
         //現在日時から当月の初日と最終日を算出
         LocalDate today = LocalDate.now();
