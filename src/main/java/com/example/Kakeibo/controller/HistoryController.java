@@ -2,9 +2,11 @@ package com.example.Kakeibo.controller;
 
 import com.example.Kakeibo.controller.form.RecordForm;
 import com.example.Kakeibo.controller.form.RecordHistoryForm;
+import com.example.Kakeibo.controller.form.UserForm;
 import com.example.Kakeibo.service.RecordService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +27,9 @@ public class HistoryController {
     @Autowired
     RecordService recordService;
 
+    @Autowired
+    HttpSession session;
+
     /*
      * 履歴画面表示処理
      */
@@ -33,15 +38,21 @@ public class HistoryController {
         ModelAndView mav = new ModelAndView();
 
         //ログインユーザ情報を取得
-        //UserForm loginUser = (UserForm) session.getAttribute("loginUser");
-        //Integer loginId = loginUser.getId();
-        Integer loginId = 1;
+        UserForm loginUser = (UserForm) session.getAttribute("loginUser");
+        Integer loginId = loginUser.getId();
 
         //現在日時から当月の初日と最終日を算出
         LocalDate today = LocalDate.now();
 
         LocalDate firstDayOfMonth = today.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate lastDayOfMonth = today.with(TemporalAdjusters.lastDayOfMonth());
+
+        if(session.getAttribute("firstDayOfMonth") != null){
+            firstDayOfMonth = (LocalDate)session.getAttribute("firstDayOfMonth");
+            lastDayOfMonth = (LocalDate)session.getAttribute("lastDayOfMonth");
+            session.removeAttribute("firstDayOfMonth");
+            session.removeAttribute("lastDayOfMonth");
+        }
 
         if(nextMonth != null){
             firstDayOfMonth = LocalDate.parse(nextMonth).plusDays(2);
@@ -56,6 +67,9 @@ public class HistoryController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String firstDay = firstDayOfMonth.format(formatter);
         String lastDay = lastDayOfMonth.format(formatter);
+
+        session.setAttribute("firstDayOfMonth", firstDayOfMonth);
+        session.setAttribute("lastDayOfMonth", lastDayOfMonth);
 
         List<RecordHistoryForm> results = recordService.select(firstDay, lastDay, loginId);
 

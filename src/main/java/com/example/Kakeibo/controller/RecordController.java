@@ -10,10 +10,14 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -82,10 +86,19 @@ public class RecordController {
     @GetMapping("/newRecord")
     public ModelAndView getNewRecord(){
         ModelAndView mav = new ModelAndView();
+        RecordForm recordForm = new RecordForm();
+        mav.addObject("record", recordForm);
         mav.setViewName("new_record");
         return mav;
     }
-
+    /*
+     * 記録登録処理
+     */
+    @PostMapping("/newRecord")
+    public ModelAndView postNewRecord(RecordForm reqRecord){
+        recordService.insert(reqRecord);
+        return new ModelAndView("redirect:/");
+    }
     /*
      * 記録編集画面表示
      */
@@ -97,7 +110,6 @@ public class RecordController {
 
         //セッションから遷移元画面の識別子を取得
         String landmark = (String)session.getAttribute("landmark");
-        session.removeAttribute("landmark");
         //識別子から遷移元画面が家計簿画面だった場合は、セッションから小カテゴリIDを取得し画面にセット
         if(Objects.equals(landmark, "houseHold")){
             Integer smallCategoryId = (Integer)session.getAttribute("smallCategoryId");
@@ -118,9 +130,20 @@ public class RecordController {
         ModelAndView mav = new ModelAndView();
 
         Integer id = recordForm.getId();
+        /*Date date = new Date();
+        recordForm.setCreatedDate(date);
+        recordForm.setUpdatedDate(date);*/
         recordService.update(recordForm, id);
 
-        mav.setViewName("/");
-        return mav;
+        String landmark = (String)session.getAttribute("landmark");
+        if(Objects.equals(landmark, "houseHold")){
+            Integer smallCategoryID = recordForm.getSmallCategoryId();
+            return new ModelAndView("redirect:/showRecord?smallCategoryId=" + smallCategoryID);
+        } else if (Objects.equals(landmark, "history")) {
+            String date = recordForm.getDate();
+            return new ModelAndView("redirect:/showRecord?date=" + date);
+        }else {
+            return new ModelAndView("redirect:/");
+        }
     }
 }

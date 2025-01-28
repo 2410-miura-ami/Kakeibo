@@ -19,8 +19,13 @@
     <div class="alert alert-danger" th:each="errorMessage : ${errorMessages}">
         <p th:text="${errorMessage}"></p>
     </div>
-    <form th:method="put" th:action="@{/newUser}" th:object="${user}" class="text-center" >
+    <form th:method="put" th:action="@{/newRecord}" th:object="${record}" class="text-center" >
     <div class="input-block">
+        <div class="select-block">
+            <label>日付:
+                <input type="date" th:field="*{date}">
+            </label>
+        </div>
         <div class="select-block">
             <label>収支：
                 <select id="category-select-3">
@@ -35,11 +40,21 @@
                 </select>
             </label>
         </div>
-        <div class="select-block">
+        <div class="select-block" >
             <label>小カテゴリー：
-                <select id="product-select" disabled>
-                    <option>選択してください</option>
+                <select id="product-select" th:field="*{smallCategoryId}" disabled>
+                    <option value="0">選択してください</option>
                 </select>
+            </label>
+        </div>
+        <div class="select-block">
+            <label>金額：
+                <input type="number" step="1" min="0" th:field="*{amount}">
+            </label>
+        </div>
+        <div class="select-block">
+            <label>メモ：
+                <input type="text" max="50" th:field="*{memo}">
             </label>
         </div>
     </div>
