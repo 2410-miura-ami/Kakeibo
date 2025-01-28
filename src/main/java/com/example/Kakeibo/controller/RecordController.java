@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -55,7 +56,14 @@ public class RecordController {
     @GetMapping("/newRecord")
     public ModelAndView getNewRecord(){
         ModelAndView mav = new ModelAndView();
+        RecordForm recordForm = new RecordForm();
+        mav.addObject("recordForm", recordForm);
         mav.setViewName("new_record");
         return mav;
+    }
+
+    @PostMapping("/newRecord")
+    public void postNewRecord(RecordForm reqRecord){
+        ModelAndView mav = new ModelAndView();
     }
 }

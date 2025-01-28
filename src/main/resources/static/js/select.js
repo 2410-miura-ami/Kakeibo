@@ -6,15 +6,15 @@ const categories = [
 
 // 小分類と商品名は、それぞれ一つ前の選択肢と紐付けるためにオブジェクト型を使う
 const subCategories = [
-  {category: '収入', name: '給与所得'},
-  {category: '収入', name: 'その他（収入）'},
-  {category: '支出', name: '食費'},
-  {category: '支出', name: '日用品'},
-  {category: '支出', name: '交通費'},
-  {category: '支出', name: '交際費'},
-  {category: '支出', name: '水道光熱費'},
-  {category: '支出', name: '住宅'},
-  {category: '支出', name: 'その他（支出）'}
+  {category: '収入', name: '給与所得', value: '1'},
+  {category: '収入', name: 'その他（収入）', value: '2'},
+  {category: '支出', name: '食費', value: '3'},
+  {category: '支出', name: '日用品', value: '4'},
+  {category: '支出', name: '交通費', value: '5'},
+  {category: '支出', name: '交際費', value: '6'},
+  {category: '支出', name: '水道光熱費', value: '7'},
+  {category: '支出', name: '住宅', value: '8'},
+  {category: '支出', name: 'その他（支出）', value: '9'}
 ];
 
 const products = [
@@ -126,6 +126,7 @@ subCategorySelect3.addEventListener('input', () => {
     if (subCategorySelect3.value == product.subCategory) {
       const option = document.createElement('option');
       option.textContent = product.name;
+      option.value = product.value;
 
       productSelect.appendChild(option);
     }
