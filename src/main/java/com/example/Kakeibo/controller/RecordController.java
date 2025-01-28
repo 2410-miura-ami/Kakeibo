@@ -10,6 +10,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -145,7 +149,23 @@ public class RecordController {
      * 記録登録処理
      */
     @PostMapping("/newRecord")
-    public ModelAndView postNewRecord(RecordForm reqRecord){
+    public ModelAndView postNewRecord(ModelAndView mav, @Validated RecordForm reqRecord, BindingResult result){
+        List<String> errorMessages = new ArrayList<>();
+        if (result.hasErrors()) {
+            //エラーがあったら、エラーメッセージを格納する
+            //エラーメッセージの取得
+            for (FieldError error : result.getFieldErrors()) {
+                String message = error.getDefaultMessage();
+                //取得したエラーメッセージをエラーメッセージのリストに格納
+                errorMessages.add(message);
+            }
+        }
+        if (!errorMessages.isEmpty()) {
+            mav.setViewName("new_record");
+            mav.addObject("errorMessages", errorMessages);
+            mav.addObject("record", reqRecord);
+            return mav;
+        }
         recordService.insert(reqRecord);
         return new ModelAndView("redirect:/");
     }
