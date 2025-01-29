@@ -53,6 +53,7 @@ const products = [
 function firstOption() {
   const first = document.createElement('option');
   first.textContent = '選択してください';
+  first.value = '0';
 
   return first;
 }

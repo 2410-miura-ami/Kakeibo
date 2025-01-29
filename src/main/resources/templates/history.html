@@ -11,11 +11,17 @@
 </head>
 <body>
 <header>
-    <h1>Kakeibo</h1>
+    <a th:href="@{/}" class="home-logo">
+        <h1>Kakeibo</h1>
+    </a>
     <form th:action="@{/}" method="get">
         <button type="submit" class="btn btn-outline-secondary me-3">戻る</button>
     </form>
 </header>
+
+<div class="alert alert-danger" th:each="errorMessage : ${errorMessages}">
+    <p th:text="${errorMessage}"></p>
+</div>
 
 <form th:action="@{/history}" class="form">
     <input type="hidden" id="previousMonth" name="previousMonth" value="">

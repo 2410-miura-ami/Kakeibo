@@ -13,7 +13,9 @@
 </head>
 <body>
 <header>
-    <h1>Kakeibo</h1>
+    <a th:href="@{/}" class="home-logo">
+        <h1>Kakeibo</h1>
+    </a>
     <form th:action="@{/logout}" method="get">
         <button type="submit" class="btn btn-outline-secondary me-3">ログアウト</button>
     </form>
@@ -108,6 +110,14 @@
                         </td>
                     </tr>
 
+                </div>
+
+                <div th:if="${expenditureByBigCategory == null}">
+                    <tr>
+                        <td th:text="登録がありません" style="color : #aaa"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
                 </div>
             </tbody>
         </table>

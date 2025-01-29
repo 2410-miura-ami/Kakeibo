@@ -21,6 +21,26 @@ header {
     width : 80%;
 }
 
+.contents {
+    width : 40%;
+    min-width : 400px;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 8px #ddd;
+    border-radius : 15px;
+    padding: 30px;
+    margin-top : 50px;
+}
+
+.back-contents {
+    width : 40%;
+    min-width : 400px;
+    margin-top : 20px;
+}
+
+.pad20 {
+    padding : 20px 0;
+}
+
 .errorMessages {
     color : red;
     font-size : 14px;
@@ -28,6 +48,11 @@ header {
 
 .alert-danger{
     height: 50px;
+}
+
+.home-logo {
+    text-decoration : none;
+    color : #000;
 }
 
 .box-left {
@@ -142,4 +167,18 @@ header {
 select, label {
   height: 32px;
   font-size: 14px;
+}
+
+.signup {
+    margin-bottom : 0;
+    margin-top : 60px;
+    /*border-top : 1px solid #ddd;*/
+}
+
+.header-contents {
+    margin-bottom : 30px;
+}
+
+.history {
+    margin-bottom : 15px;
 }

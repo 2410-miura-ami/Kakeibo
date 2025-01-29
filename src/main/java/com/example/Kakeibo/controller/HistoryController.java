@@ -41,6 +41,11 @@ public class HistoryController {
         UserForm loginUser = (UserForm) session.getAttribute("loginUser");
         Integer loginId = loginUser.getId();
 
+        //エラーメッセージの取得と表示
+        List<String> errorMessages = (List<String>)session.getAttribute("errorMessages");
+        mav.addObject("errorMessages", errorMessages);
+        session.removeAttribute("errorMessages");
+
         //現在日時から当月の初日と最終日を算出
         LocalDate today = LocalDate.now();
 

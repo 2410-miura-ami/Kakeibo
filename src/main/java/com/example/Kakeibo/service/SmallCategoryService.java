@@ -3,6 +3,8 @@ package com.example.Kakeibo.service;
 import com.example.Kakeibo.controller.form.RecordBigCategoryForm;
 import com.example.Kakeibo.controller.form.RecordSmallCategoryForm;
 import com.example.Kakeibo.repository.SmallCategoryRepository;
+import com.example.Kakeibo.repository.entity.BigCategory;
+import com.example.Kakeibo.repository.entity.SmallCategory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -48,5 +50,16 @@ public class SmallCategoryService {
             recordSmallCategoryForms.add(recordSmallCategoryForm);
         }
         return recordSmallCategoryForms;
+    }
+
+    /*
+     * 渡ってきたsmallCategoryIDの存在チェック
+     */
+    public boolean findById(int smallCategoryId) {
+        SmallCategory smallCategory = smallCategoryRepository.findById(smallCategoryId).orElse(null);
+        if (smallCategory == null) {
+            return false;
+        }
+        return true;
     }
 }
