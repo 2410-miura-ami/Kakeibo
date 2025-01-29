@@ -70,12 +70,64 @@ const categorySelect3 = document.getElementById('category-select-3');
 const subCategorySelect3 = document.getElementById('sub-category-select-3');
 const productSelect = document.getElementById('product-select');
 
+//デフォルト値を既存の記録から設定
+const defaultCategory = bopName;
+const defaultSubCategory = bigCategoryName;
+const defaultProduct = String(smallCategoryId);
+
 // 大分類のプルダウンを生成
 categories.forEach(category => {
   const option = document.createElement('option');
   option.textContent = category;
+  option.value = category;
+
+  if (category === defaultCategory) {
+        option.selected = true;
+        optionClear('#sub-category-select-3 > option');
+        subCategorySelect3.appendChild(firstOption());
+        subCategorySelect3.disabled = false;
+  }
 
   categorySelect3.appendChild(option);
+});
+
+
+// 大分類で選択されたカテゴリーと同じ小分類のみを、プルダウンの選択肢に設定する
+subCategories.forEach(subCategory => {
+  if (categorySelect3.value === subCategory.category) {
+    const option = document.createElement('option');
+    option.textContent = subCategory.name;
+
+    //デフォルト値と合致する場合にselected要素を追加
+          if (subCategory.name === defaultSubCategory) {
+              option.selected = true;
+              // 商品のプルダウンの選択肢を全て削除し、選択（クリック）できるようにする
+              optionClear('#product-select > option');
+              productSelect.appendChild(firstOption());
+              productSelect.disabled = false;
+          }
+    subCategorySelect3.appendChild(option);
+  }
+
+
+});
+
+// 小分類で選択されたカテゴリーと同じ商品のみを、プルダウンの選択肢に設定する
+products.forEach(product => {
+  if (subCategorySelect3.value == product.subCategory) {
+    const option = document.createElement('option');
+    option.textContent = product.name;
+    option.value = product.value;
+
+    //デフォルト値と合致する場合にselected要素を追加
+          if (option.value === defaultProduct) {
+              productSelect.disabled = false;
+              option.selected = true;
+          }
+
+    productSelect.appendChild(option);
+  }
+
 });
 
 // 大分類が選択されたら小分類のプルダウンを生成
@@ -102,6 +154,9 @@ categorySelect3.addEventListener('input', () => {
     if (categorySelect3.value == subCategory.category) {
       const option = document.createElement('option');
       option.textContent = subCategory.name;
+      option.value = subCategory.name;
+
+
 
       subCategorySelect3.appendChild(option);
     }
@@ -128,6 +183,8 @@ subCategorySelect3.addEventListener('input', () => {
       const option = document.createElement('option');
       option.textContent = product.name;
       option.value = product.value;
+
+
 
       productSelect.appendChild(option);
     }

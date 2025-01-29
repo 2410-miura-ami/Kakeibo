@@ -35,16 +35,18 @@
     <div class="alert alert-danger" th:each="errorMessage : ${errorMessages}">
         <p th:text="${errorMessage}"></p>
     </div>
-    <form th:method="put" th:action="@{/newUser}" th:object="${user}" class="text-center" >
+    <form th:method="put" th:action="@{/updateRecord}" class="text-center" >
         <script th:inline="javascript">
             const bop = /*[[${record.bop}]]*/ 'bop';
-            const bigCategoryName = /*[[${record.bigCategoryName}]]*/ 'bigCategoryName';
-            const smallCategoryName = /*[[${record.smallCategoryName}]]*/ 'smallCategoryName';
+            const bigCategoryId = /*[[${record.bigCategoryId}]]*/ 'bigCategoryId';
+            const smallCategoryId = /*[[${record.smallCategoryId}]]*/ 'smallCategoryId';
         </script>
         <div class="input-block">
+            <input type="hidden" name="id" th:value="${record.id}" />
+            <input type="hidden" name="userId" th:value="${record.userId}" />
             <div class="select-block">
                 <label>日付:
-                    <input type="date" th:value="${record.date}">
+                    <input type="date" name="date" th:value="${record.date}">
                 </label>
             </div>
             <div class="select-block">
@@ -53,6 +55,7 @@
                         <option>選択してください</option>
                     </select>
                 </label>
+                <input type="hidden" id="hidden-category" name="bop" />
             </div>
             <div class="select-block">
                 <label>大カテゴリー：
@@ -60,6 +63,7 @@
                         <option>選択してください</option>
                     </select>
                 </label>
+                <input type="hidden" id="hidden-big-category" name="bigCategoryId" />
             </div>
             <div class="select-block">
                 <label>小カテゴリー：
@@ -67,15 +71,16 @@
                         <option>選択してください</option>
                     </select>
                 </label>
+                <input type="hidden" id="hidden-small-category" name="smallCategoryId" />
             </div>
             <div class="select-block">
                 <label>金額：
-                    <input type="number" step="1" min="0" th:value="${record.amount}">
+                    <input type="number" name="amount" step="1" min="0" th:value="${record.amount}" required>
                 </label>
             </div>
             <div class="select-block">
                 <label>メモ：
-                    <input type="text" max="50" th:value="${record.memo}">
+                    <input type="text" name="memo" max="50" th:value="${record.memo}">
                 </label>
             </div>
         </div>

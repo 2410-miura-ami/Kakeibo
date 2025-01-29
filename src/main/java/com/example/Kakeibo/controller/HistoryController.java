@@ -2,6 +2,7 @@ package com.example.Kakeibo.controller;
 
 import com.example.Kakeibo.controller.form.RecordForm;
 import com.example.Kakeibo.controller.form.RecordHistoryForm;
+import com.example.Kakeibo.controller.form.UserForm;
 import com.example.Kakeibo.service.RecordService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -37,9 +38,8 @@ public class HistoryController {
         ModelAndView mav = new ModelAndView();
 
         //ログインユーザ情報を取得
-        //UserForm loginUser = (UserForm) session.getAttribute("loginUser");
-        //Integer loginId = loginUser.getId();
-        Integer loginId = 1;
+        UserForm loginUser = (UserForm) session.getAttribute("loginUser");
+        Integer loginId = loginUser.getId();
 
         //エラーメッセージの取得と表示
         List<String> errorMessages = (List<String>)session.getAttribute("errorMessages");
@@ -51,6 +51,13 @@ public class HistoryController {
 
         LocalDate firstDayOfMonth = today.with(TemporalAdjusters.firstDayOfMonth());
         LocalDate lastDayOfMonth = today.with(TemporalAdjusters.lastDayOfMonth());
+
+        if(session.getAttribute("firstDayOfMonth") != null){
+            firstDayOfMonth = (LocalDate)session.getAttribute("firstDayOfMonth");
+            lastDayOfMonth = (LocalDate)session.getAttribute("lastDayOfMonth");
+            session.removeAttribute("firstDayOfMonth");
+            session.removeAttribute("lastDayOfMonth");
+        }
 
         if(nextMonth != null){
             firstDayOfMonth = LocalDate.parse(nextMonth).plusDays(2);
@@ -65,6 +72,9 @@ public class HistoryController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String firstDay = firstDayOfMonth.format(formatter);
         String lastDay = lastDayOfMonth.format(formatter);
+
+        session.setAttribute("firstDayOfMonth", firstDayOfMonth);
+        session.setAttribute("lastDayOfMonth", lastDayOfMonth);
 
         List<RecordHistoryForm> results = recordService.select(firstDay, lastDay, loginId);
 

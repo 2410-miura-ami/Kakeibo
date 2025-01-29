@@ -30,6 +30,11 @@
         <p th:text="${errorMessage}"></p>
     </div>
     <form th:method="put" th:action="@{/newRecord}" th:object="${record}" class="text-center" >
+        <script th:inline="javascript">
+            const bopName = /*[[${record.bopName}]]*/ 'bop';
+            const bigCategoryName = /*[[${record.bigCategoryName}]]*/ 'bigCategoryName';
+            const smallCategoryId = /*[[${record.smallCategoryId}]]*/ 'smallCategoryId';
+        </script>
     <div class="input-block">
         <div class="select-block">
             <label>日付:
@@ -38,15 +43,15 @@
         </div>
         <div class="select-block">
             <label>収支：
-                <select id="category-select-3">
-                    <option>選択してください</option>
+                <select id="category-select-3" th:field="*{bopName}">
+                    <option value="選択してください">選択してください</option>
                 </select>
             </label>
         </div>
         <div class="select-block">
             <label>大カテゴリー：
-                <select id="sub-category-select-3" disabled>
-                    <option>選択してください</option>
+                <select id="sub-category-select-3" th:field="*{bigCategoryName}" disabled>
+                    <option value="選択してください">選択してください</option>
                 </select>
             </label>
         </div>
@@ -71,35 +76,11 @@
         <input type="submit" value="追加" class="btn btn-primary update-button" />
     </form>
 
-    <!--<form th:method="put" th:action="@{/newUser}" th:object="${user}" class="text-center" >
-
-        <table class="table table-newUser">
-            <tr><th>社員番号</th><td><input type="text" th:field="*{employeeNumber}" class="form-control" /></td></tr>
-            <tr><th>パスワード</th><td><input type="password" th:field="*{password}" class="form-control" /></td></tr>
-            <tr><th>パスワード(確認用)</th><td><input type="password" th:field="*{passwordConfirmation}" class="form-control" /></td></tr>
-            <tr><th>氏名</th><td><input type="text" th:field="*{name}" class="form-control" /></td></tr>
-            <tr><th>役職</th>
-                <td>
-                    <select name="position" class="form-select">
-                        <option value="1" th:selected="${user.positionId == 1}">社員</option>
-                        <option value="2" th:selected="${user.positionId == 2}">グループ長</option>
-                        <option value="3" th:selected="${user.positionId == 3}">システム管理者</option>
-                    </select>
-                </td>
-            </tr>
-        </table>
-
-
-        <input type="submit" value="追加" class="btn btn-primary update-button" />
-
-
-    </form>
-
     <div class="footer-contents">
-        <form th:action="@{/systemManage}">
+        <form th:action="@{/}">
             <input type="submit" value="戻る" class="btn btn-secondary btn-sm" />
         </form>
-    </div>-->
+    </div>
 
     <div class="footer">
         <form th:action="@{/}">
