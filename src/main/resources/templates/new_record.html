@@ -10,6 +10,16 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+
+<header>
+    <a th:href="@{/}" class="home-logo">
+        <h1>Kakeibo</h1>
+    </a>
+    <form th:action="@{/logout}" method="get">
+        <button type="submit" class="btn btn-outline-secondary me-3">ログアウト</button>
+    </form>
+</header>
+
 <div class="header-contents">
     <h2 class="text-center my-3">新規記録</h2>
 </div>
@@ -90,6 +100,12 @@
             <input type="submit" value="戻る" class="btn btn-secondary btn-sm" />
         </form>
     </div>-->
+
+    <div class="footer">
+        <form th:action="@{/}">
+            <input type="submit" value="戻る" class="btn btn-secondary btn-sm" />
+        </form>
+    </div>
 
 </div>
 </body>

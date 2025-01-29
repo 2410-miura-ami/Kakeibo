@@ -13,8 +13,13 @@ public class FilterConfig {
         FilterRegistrationBean<LoginFilter> bean = new FilterRegistrationBean<>();
 
         bean.setFilter(new LoginFilter());
-        //login画面以外の全ての画面にフィルターを設定
+        //login画面,ユーザ登録画面以外の全ての画面にフィルターを設定
         bean.addUrlPatterns("/");
+        bean.addUrlPatterns("/newRecord");
+        bean.addUrlPatterns("/houseHold/*");
+        bean.addUrlPatterns("/showRecord/*");
+        bean.addUrlPatterns("/editRecord/*");
+        bean.addUrlPatterns("/history");
         bean.setOrder(1);
         return bean;
     }

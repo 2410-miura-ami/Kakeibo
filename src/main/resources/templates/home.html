@@ -32,7 +32,7 @@
     <form th:action="@{/newRecord}">
         <input type="submit" value="新規登録" class="btn btn-secondary newUser-button"/>
     </form>
-    <div class="main-contents">
+    <div class="main-contents mx-auto">
         <div class="bar-chart ">
             <h4 class="d-grid gap-2 col-6 mx-auto displayCenter">月別収支額</h4>
             <a th:href="@{/(num = -1)}" class="float-start">&lt;前月へ</a>
@@ -86,60 +86,64 @@
             </script>
         </div>
         <br>
-        <div class="box-left ">
-            <h4 class="d-grid gap-2 col-6 mx-auto displayCenter" th:text="${#dates.format(startDate, 'yyyy年MM月') + 'の支出額内訳'}"></h4>
+        <div class="home-contents mx-auto">
+            <div class="home-item1">
+                <h4 class="d-grid gap-2 col-6 mx-auto displayCenter" th:text="${#dates.format(startDate, 'yyyy年MM月') + 'の支出額内訳'}"></h4>
 
-            <div class="pie-chart">
+                <div class="pie-chart">
 
-                <div class="container" style="width:50%">
-                    <div class="row">
-                        <div class="col m6 s12">
-                            <div class="exChart d-grid gap-2 col-8 mx-auto">
-                                <canvas id="expenseChart"></canvas>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col m6 s12">
+                                <div class="exChart d-grid gap-2 col-6 mx-auto">
+                                    <canvas id="expenseChart"></canvas>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <!-- CDN -->
+                    <script type="text/javascript" th:inline="javascript">
+
+                        var ctx = document.getElementById("expenseChart");
+                        var expenseChart = new Chart(ctx, {
+                          type: 'doughnut',
+                          data: {
+                            labels: [[ ${expenseLabel} ]], //変数式で取り出す
+                            datasets:[{
+                                backgroundColor: [[${categoryColor}]],
+                                data:[[${bigCategoryData}]],  //labelと同様
+                            }]
+                          },
+                          options: {
+                            title: {
+                              display: true,
+                              text: '支出'
+                            }
+                          }
+                        });
+                    </script>
                 </div>
-                <!-- CDN -->
-                <script type="text/javascript" th:inline="javascript">
+            </div>
+            <div class="home-item2">
+                <div class="houseHold-button">
+                    <form th:action="@{/houseHold}" method="get">
+                        <button type="submit" class="btn btn-outline-secondary me-3">詳細を見る</button>
+                    </form>
+                </div>
 
-                    var ctx = document.getElementById("expenseChart");
-                    var expenseChart = new Chart(ctx, {
-                      type: 'doughnut',
-                      data: {
-                        labels: [[ ${expenseLabel} ]], //変数式で取り出す
-                        datasets:[{
-                            backgroundColor: [[${categoryColor}]],
-                            data:[[${bigCategoryData}]],  //labelと同様
-                        }]
-                      },
-                      options: {
-                        title: {
-                          display: true,
-                          text: '支出'
-                        }
-                      }
-                    });
-                </script>
+                <div class="bop">
+                    <div class="bop-items">
+                        <span>収入</span><span  class="bop-item income" th:text="${incomeTotalAmount + '円'}"></span>
+                    </div>
+                    <div class="bop-items">
+                        <span>支出</span><span  class="bop-item expense" th:text="${expenseTotalAmount + '円'}"></span>
+                    </div>
+                    <div class="bop-items">
+                        <span>収支</span><span  class="bop-item" th:text="${incomeTotalAmount - expenseTotalAmount + '円'}"></span>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="float-start bop" >
-            <div class="bop-items">
-                <span>収入</span><span  class="bop-item income" th:text="${incomeTotalAmount + '円'}"></span>
-            </div>
-            <div class="bop-items">
-                <span>支出</span><span  class="bop-item expense" th:text="${expenseTotalAmount + '円'}"></span>
-            </div>
-            <div class="bop-items">
-                <span>収支</span><span  class="bop-item" th:text="${incomeTotalAmount - expenseTotalAmount + '円'}"></span>
-            </div>
-        </div>
-        <br>
 
-        <div>
-            <form th:action="@{/houseHold}" method="get">
-                <button type="submit" class="btn btn-outline-secondary me-3">詳細を見る</button>
-            </form>
         </div>
 
     </div>

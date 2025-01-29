@@ -9,7 +9,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <body>
 <header>
-    <h1>Kakeibo</h1>
+    <a th:href="@{/}" class="home-logo">
+        <h1>Kakeibo</h1>
+    </a>
     <div th:if="${landmark} == 'history'" >
         <form th:action="@{/history}" method="get">
             <button type="submit" class="btn btn-outline-secondary me-3">戻る</button>

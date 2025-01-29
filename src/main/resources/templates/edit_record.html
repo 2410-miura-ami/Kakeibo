@@ -11,7 +11,9 @@
 </head>
 <body>
 <header>
-    <h1>Kakeibo</h1>
+    <a th:href="@{/}" class="home-logo">
+        <h1>Kakeibo</h1>
+    </a>
     <div th:if="${landmark} == 'history'" >
         <a th:href="@{/showRecord?date={date}(date=${record.date})}">
             <button type="submit" class="btn btn-outline-secondary me-3">戻る</button>
