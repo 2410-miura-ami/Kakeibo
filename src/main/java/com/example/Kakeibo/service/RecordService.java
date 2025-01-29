@@ -143,6 +143,11 @@ public class RecordService {
     public RecordForm select(Integer id) {
 
         List<Object[]> records = recordRepository.select(id);
+
+        if (records.isEmpty()) {
+            return null;
+        }
+
         List<RecordForm> results = objectToForm2(records);
 
         return results.get(0);
