@@ -16,13 +16,12 @@ public class RecordForm {
     private int id;
 
     //@NumberFormat(style = NumberFormat.Style.CURRENCY)
-    @Min(value =1 ,message = "・無効な入力です")
+    @Min(value =1 ,message = "・無効な金額です")
     private int amount;
 
     private Integer bop;
 
-    @Range(min = 1,max = 29, message = "・無効な入力です")
-    @NotNull(message = "・無効な入力です")
+    @Range(min = 1,max = 29, message = "・小カテゴリーまで入力してください")
     private int smallCategoryId;
 
     private int bigCategoryId;
@@ -31,10 +30,14 @@ public class RecordForm {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private String date;
 
-    @Size(max = 50, message = "・50文字以下で入力してください")
+    @Size(max = 50, message = "・メモは50文字以下で入力してください")
     private String memo;
 
     private int userId;
+
+    //追加しました（浦郷）
+    public String bopName;
+    public String bigCategoryName;
 
     private Date createdDate;
 

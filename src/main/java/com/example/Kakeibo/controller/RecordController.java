@@ -2,6 +2,7 @@ package com.example.Kakeibo.controller;
 
 import com.example.Kakeibo.controller.form.BigSmallCategoryForm;
 import com.example.Kakeibo.controller.form.RecordForm;
+import com.example.Kakeibo.controller.form.TempData;
 import com.example.Kakeibo.controller.form.UserForm;
 import com.example.Kakeibo.service.BigSmallCategoryService;
 import com.example.Kakeibo.service.RecordService;
@@ -144,7 +145,9 @@ public class RecordController {
     public ModelAndView getNewRecord(){
         ModelAndView mav = new ModelAndView();
         RecordForm recordForm = new RecordForm();
+        TempData tempData = new TempData();
         mav.addObject("record", recordForm);
+        mav.addObject("tempData", tempData);
         mav.setViewName("new_record");
         return mav;
     }
@@ -152,7 +155,7 @@ public class RecordController {
      * 記録登録処理
      */
     @PostMapping("/newRecord")
-    public ModelAndView postNewRecord(ModelAndView mav, @Validated RecordForm reqRecord, BindingResult result){
+    public ModelAndView postNewRecord(@Validated RecordForm reqRecord, BindingResult result, TempData tempData){
         List<String> errorMessages = new ArrayList<>();
         if (result.hasErrors()) {
             //エラーがあったら、エラーメッセージを格納する
@@ -164,9 +167,11 @@ public class RecordController {
             }
         }
         if (!errorMessages.isEmpty()) {
+            ModelAndView mav = new ModelAndView();
             mav.setViewName("new_record");
             mav.addObject("errorMessages", errorMessages);
             mav.addObject("record", reqRecord);
+            mav.addObject("tempData", tempData);
             return mav;
         }
         recordService.insert(reqRecord);
