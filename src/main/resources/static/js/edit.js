@@ -77,6 +77,7 @@ const defaultProduct = smallCategoryId;
 let defaultSubCategoryName = '';
 
 
+categorySelect3.firstOption()
 // 大分類のプルダウンを生成
 categories.forEach(category => {
   const option = document.createElement('option');
@@ -159,7 +160,7 @@ products.forEach(product => {
     //デフォルト値と合致する場合にselected要素を追加
     if (String(product.value) === String(defaultProduct)) {
         option.selected = true;
-        document.getElementById('hidden-small-category').value = defaultProduct;
+        //document.getElementById('hidden-small-category').value = defaultProduct;
     }
 
     productSelect.appendChild(option);
@@ -252,9 +253,9 @@ subCategorySelect3.addEventListener('input', () => {
     productSelect.addEventListener('input', () => {
       products.forEach(product => {
         if (String(productSelect.value) === String(product.value)) {
-          document.getElementById('hidden-small-category').value = product.value;
+          //document.getElementById('hidden-small-category').value = product.value;
         }else if(productSelect.value == 0){
-          document.getElementById('hidden-small-category').value = 0;
+          //document.getElementById('hidden-small-category').value = 0;
         }
       });
     });
