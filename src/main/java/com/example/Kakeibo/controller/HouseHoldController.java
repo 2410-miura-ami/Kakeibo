@@ -90,7 +90,7 @@ public class HouseHoldController {
         } else {
             bigCategoryName.add("未登録");
             amountByCategory.add(BigDecimal.valueOf(1));
-            color.add("rgb(245, 245, 245)");
+            color.add("rgb(240, 240, 240)");
         }
         //配列に変換
         String expenseLabel[] = bigCategoryName.toArray(new String[bigCategoryName.size()]);
@@ -153,10 +153,14 @@ public class HouseHoldController {
             return new ModelAndView("redirect:/houseHold");
         }
 
-
         //ログインユーザ情報を取得
         UserForm loginUser = (UserForm) session.getAttribute("loginUser");
         Integer loginId = loginUser.getId();
+
+        //エラーメッセージの取得と表示
+        errorMessages = (List<String>)session.getAttribute("errorMessages");
+        mav.addObject("errorMessages", errorMessages);
+        session.removeAttribute("errorMessages");
 
         //表示月の取得
         Calendar calender = Calendar.getInstance();
@@ -197,7 +201,7 @@ public class HouseHoldController {
         } else {
             smallCategoryName.add("未登録");
             amountByCategory.add(BigDecimal.valueOf(1));
-            color.add("rgb(245, 245, 245)");
+            color.add("rgb(240, 240, 240)");
         }
         //配列に変換
         String expenseLabel[] = smallCategoryName.toArray(new String[smallCategoryName.size()]);

@@ -6,6 +6,7 @@ import com.example.Kakeibo.controller.form.TempData;
 import com.example.Kakeibo.controller.form.UserForm;
 import com.example.Kakeibo.service.BigSmallCategoryService;
 import com.example.Kakeibo.service.RecordService;
+import com.example.Kakeibo.service.SmallCategoryService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -40,11 +44,15 @@ public class RecordController {
     @Autowired
     HttpSession session;
 
+    @Autowired
+    SmallCategoryService smallCategoryService;
+
+
     /*
      * 個別記録画面表示
      */
     @GetMapping("/showRecord")
-    public ModelAndView selectRecord(@RequestParam(required = false) String date, @RequestParam(required = false) Integer smallCategoryId) {
+    public ModelAndView selectRecord(@RequestParam(required = false) String date, @RequestParam(required = false) String smallCategoryId) {
         ModelAndView mav = new ModelAndView();
 
         //ログインユーザ情報を取得
@@ -53,30 +61,73 @@ public class RecordController {
 
         List<BigSmallCategoryForm> results = new ArrayList<>();
 
+        //【追加】
+        //大カテゴリIDをセッションから取得
+        Integer bigCategoryId = (Integer)session.getAttribute("bigCategoryId");
+
+        List<String> errorMessages = new ArrayList<>();
+        //バリデーションsmallCategoryIdの表記チェック
+        if (smallCategoryId != null && (smallCategoryId.isEmpty() || !smallCategoryId.matches("^[0-9]+$"))) {
+            errorMessages.add("・不正なパラメータが入力されました");
+            session.setAttribute("errorMessages", errorMessages);
+            return new ModelAndView("redirect:/houseHold/" + bigCategoryId);
+        }
+
+        //遷移元からの引数が小カテゴリIDだった場合
+        if(smallCategoryId != null){
+
+            int smallCategory = Integer.parseInt(smallCategoryId);
+            //存在チェック（smallCategoryIdが登録されているカテゴリかチェック）
+            if (!smallCategoryService.findById(smallCategory)) {
+                errorMessages.add("・不正なパラメータが入力されました");
+                session.setAttribute("errorMessages", errorMessages);
+                return new ModelAndView("redirect:/houseHold/" + bigCategoryId);
+            }
+
+            //セッションからselectの開始日と終了日を取得
+            Date startDate = (Date)session.getAttribute("startDate");
+            Date endDate = (Date)session.getAttribute("endDate");
+
+            results = bigSmallCategoryService.select(loginId, smallCategory, startDate, endDate);
+            //遷移元の識別子を画面とセッションにセット
+            mav.addObject("landmark", "houseHold");
+            session.setAttribute("landmark", "houseHold");
+            //小カテゴリIDをセッションにセット
+            session.setAttribute("smallCategoryId", smallCategory);
+            //セッションから取得した大カテゴリIDを画面にセット
+            mav.addObject("bigCategoryId", bigCategoryId);
+        }
+
+        //バリデーション（dateのnull・正規表現チェック）
+        //nullまたはYYYY/MM/DDのフォーマットでない場合、エラーメッセージを表示
+        if ((date != null) && (!date.matches("^\\d{4}-\\d{2}-\\d{2}$"))) {
+            errorMessages.add("・不正なパラメータが入力されました");
+            session.setAttribute("errorMessages", errorMessages);
+            return new ModelAndView("redirect:/history");
+        }
+
         //遷移元からの引数が日付だった場合
-        if(date != null){
+        if (date != null) {
+            //バリデーション（dateが存在する日付かチェック）
+            //リクエストパラメータで取得した日付をString型からLocalDate型に変換
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            try {
+                LocalDate.parse(date, formatter);
+                //LocalDate型への変換が失敗した場合、エラーメッセージを表示
+            } catch (DateTimeParseException e) {
+                errorMessages.add("・不正なパラメータが入力されました");
+                session.setAttribute("errorMessages", errorMessages);
+                mav.setViewName("redirect:/history");
+                return mav;
+            }
+
+            //dateをもとに個別記録取得
             results = bigSmallCategoryService.select(loginId, date);
             //遷移元の識別子を画面とセッションにセット
             mav.addObject("landmark", "history");
             session.setAttribute("landmark", "history");
         }
-        //遷移元からの引数が小カテゴリIDだった場合
-        if(smallCategoryId != null){
-            //セッションからselectの開始日と終了日を取得
-            Date startDate = (Date)session.getAttribute("startDate");
-            Date endDate = (Date)session.getAttribute("endDate");
 
-            results = bigSmallCategoryService.select(loginId, smallCategoryId, startDate, endDate);
-            //遷移元の識別子を画面とセッションにセット
-            mav.addObject("landmark", "houseHold");
-            session.setAttribute("landmark", "houseHold");
-            //小カテゴリIDをセッションにセット
-            session.setAttribute("smallCategoryId", smallCategoryId);
-            //大カテゴリIDをセッションから取得し、画面にセット
-            Integer bigCategoryId = (Integer)session.getAttribute("bigCategoryId");
-            session.removeAttribute("bigCategoryId");
-            mav.addObject("bigCategoryId", bigCategoryId);
-        }
 
         mav.addObject("records", results);
         mav.setViewName("/show_record");

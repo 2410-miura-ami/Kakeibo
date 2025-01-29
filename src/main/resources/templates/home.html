@@ -2,9 +2,10 @@
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Kakeibo</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <meta charset="UTF-8">
     <link th:href="@{/css/style.css}" rel="styleSheet">
     <script th:src="@{/js/script.js}"></script>
@@ -13,7 +14,9 @@
 </head>
 <body>
     <header>
-        <h1>Kakeibo</h1>
+        <a th:href="@{/}" class="home-logo">
+            <h1>Kakeibo</h1>
+        </a>
         <div class="me-3 fs-6">
             　　  氏名：<span th:text="${loginUser.name}"/><br>
         </div>
@@ -21,6 +24,11 @@
             <button type="submit" class="btn btn-outline-secondary me-3">ログアウト</button>
         </form>
     </header>
+
+    <div class="history">
+        <a th:href="@{/history}" class="btn btn-outline-secondary mx-auto"><i class="bi bi-calendar-check"></i> 履歴</a>
+    </div>
+
     <form th:action="@{/newRecord}">
         <input type="submit" value="新規登録" class="btn btn-secondary newUser-button"/>
     </form>

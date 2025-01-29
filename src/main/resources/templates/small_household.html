@@ -13,13 +13,20 @@
 </head>
 <body>
 <header>
-    <h1>Kakeibo</h1>
+    <a th:href="@{/}" class="home-logo">
+        <h1>Kakeibo</h1>
+    </a>
     <form th:action="@{/logout}" method="get">
         <button type="submit" class="btn btn-outline-secondary me-3">ログアウト</button>
     </form>
 </header>
 
 <div class="main-contents mx-auto">
+
+    <div class="alert alert-danger" th:each="errorMessage : ${errorMessages}">
+        <p th:text="${errorMessage}">
+    </div>
+
     <div class="box-left ">
         <div class="display-date">
             <a th:href="@{/smallCategory/selectMonth(select = -1, bigCategoryId = ${selectBigCategory.get(0).bigCategoryId})}" class="btn btn-outline-secondary">前月</a>
@@ -84,12 +91,19 @@
                     <td>
                         <div class="btn btn-arrow-right">
                             <a th:href="@{/showRecord?smallCategoryId={smallCategoryId}(smallCategoryId=${expenditureItem.smallCategoryId})}">
-                                <span>→</span>
                             </a>
                         </div>
                     </td>
                 </tr>
 
+            </div>
+
+            <div th:if="${expenditureBySmallCategory == null}">
+                <tr>
+                    <td th:text="登録がありません" style="color : #aaa"></td>
+                    <td></td>
+                    <td></td>
+                </tr>
             </div>
             </tbody>
         </table>
