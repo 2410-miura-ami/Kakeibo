@@ -76,19 +76,21 @@ const defaultSubCategory = bigCategoryId;
 const defaultProduct = smallCategoryId;
 let defaultSubCategoryName = '';
 
-
 // 大分類のプルダウンを生成
+//繰り返し処理で<option>タグに配列categoriesの値を設定していく
 categories.forEach(category => {
+  //optionという変数に<option>タグをセット
   const option = document.createElement('option');
+  //<option>タグにテキスト内容 (表示される文字)とvalue属性をセット
   option.textContent = category.category;
   option.value = category.value
 
-　//デフォルト値と合致する場合にselected要素を追加
+　//デフォルト値と合致する場合にselected要素（初期表示用）を追加
   if (String(category.value) === String(defaultCategory)) {
       option.selected = true;
-      document.getElementById('hidden-category').value = defaultCategory;
     }
 
+  //html上の<select>タグのid属性を識別子として、作成した<option>タグを追加
   categorySelect3.appendChild(option);
 });
 
@@ -97,12 +99,8 @@ categories.forEach(category => {
 optionClear('#sub-category-select-3 > option');
 subCategorySelect3.disabled = false;
 
-const defaultOption = document.createElement('option');
-defaultOption.textContent = "選択してください";
-defaultOption.value = 0;
 // subCategorySelect3 の先頭に追加
-subCategorySelect3.prepend(defaultOption);
-
+subCategorySelect3.appendChild(firstOption());
 // 大分類で選択されたカテゴリーと同じ小分類のみを、プルダウンの選択肢に設定する
 subCategories.forEach(subCategory => {
   if (categorySelect3.value == 1) {
@@ -116,7 +114,7 @@ subCategories.forEach(subCategory => {
           if (String(subCategory.value) === String(defaultSubCategory)) {
             option.selected = true;
             defaultSubCategoryName = subCategory.name
-            document.getElementById('hidden-big-category').value = defaultSubCategory;
+            //document.getElementById('hidden-big-category').value = defaultSubCategory;
           }
     }
   }
@@ -131,9 +129,14 @@ subCategories.forEach(subCategory => {
           if (String(subCategory.value) === String(defaultSubCategory)) {
             option.selected = true;
             defaultSubCategoryName = subCategory.name
-            document.getElementById('hidden-big-category').value = defaultSubCategory;
+            //document.getElementById('hidden-big-category').value = defaultSubCategory;
           }
     }
+  }
+  // 大分類が選択されていない（「選択してください」になっている）とき、小分類を選択（クリック）できないようにする
+  if (categorySelect3.value == 0) {
+    subCategorySelect3.disabled = true;
+    return;
   }
   });
 
@@ -143,12 +146,8 @@ subCategories.forEach(subCategory => {
 optionClear('#product-select > option');
 productSelect.disabled = false;
 
-const defaultOption1 = document.createElement('option');
-defaultOption1.textContent = "選択してください";
-defaultOption1.value = 0;
 // productSelect の先頭に追加
-productSelect.appendChild(defaultOption1);
-
+productSelect.appendChild(firstOption());
 // 小分類で選択されたカテゴリーと同じ商品のみを、プルダウンの選択肢に設定する
 products.forEach(product => {
   if (String(defaultSubCategoryName) === String(product.subCategory)) {
@@ -159,10 +158,15 @@ products.forEach(product => {
     //デフォルト値と合致する場合にselected要素を追加
     if (String(product.value) === String(defaultProduct)) {
         option.selected = true;
-        document.getElementById('hidden-small-category').value = defaultProduct;
+        //document.getElementById('hidden-small-category').value = defaultProduct;
     }
 
     productSelect.appendChild(option);
+  }
+  // 小分類が選択されていない（「選択してください」になっている）とき、商品を選択（クリック）できないようにする
+  if (subCategorySelect3.value == 0) {
+    productSelect.disabled = true;
+    return;
   }
 });
 /* ↑ここから上はプルダウンのデフォルト値設定のための定義↑ */
@@ -171,7 +175,7 @@ products.forEach(product => {
 // 大分類が選択されたら小分類のプルダウンを生成
 categorySelect3.addEventListener('input', () => {
   const selectedCategory = categorySelect3.value;
-  document.getElementById('hidden-category').value = selectedCategory;
+  //document.getElementById('hidden-category').value = selectedCategory;
 
   // 小分類のプルダウンを「選択してください」のみにし、選択（クリック）できるようにする
   optionClear('#sub-category-select-3 > option');
@@ -184,7 +188,7 @@ categorySelect3.addEventListener('input', () => {
   productSelect.disabled = true;
 
   // 大分類が選択されていない（「選択してください」になっている）とき、小分類を選択（クリック）できないようにする
-  if (String(categorySelect3.value) === '選択してください') {
+  if (categorySelect3.value == 0) {
     subCategorySelect3.disabled = true;
     return;
   }
@@ -218,7 +222,7 @@ categorySelect3.addEventListener('input', () => {
 subCategorySelect3.addEventListener('input', () => {
   subCategories.forEach(subCategory => {
     if (String(subCategorySelect3.value) === String(subCategory.value)) {
-      document.getElementById('hidden-big-category').value = subCategory.value;
+      //document.getElementById('hidden-big-category').value = subCategory.value;
       defaultSubCategoryName = subCategory.name;
     }
 
@@ -252,9 +256,9 @@ subCategorySelect3.addEventListener('input', () => {
     productSelect.addEventListener('input', () => {
       products.forEach(product => {
         if (String(productSelect.value) === String(product.value)) {
-          document.getElementById('hidden-small-category').value = product.value;
+          //document.getElementById('hidden-small-category').value = product.value;
         }else if(productSelect.value == 0){
-          document.getElementById('hidden-small-category').value = 0;
+          //document.getElementById('hidden-small-category').value = 0;
         }
       });
     });
