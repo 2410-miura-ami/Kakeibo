@@ -38,7 +38,7 @@ public class RecordForm {
 
     private int userId;
 
-    //追加（浦郷）
+    //追加しました（浦郷）
     public String bopName;
     public String bigCategoryName;
 
