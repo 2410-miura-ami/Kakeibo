@@ -64,7 +64,7 @@ public class HistoryController {
             lastDayOfMonth = firstDayOfMonth.with(TemporalAdjusters.lastDayOfMonth());
         }
         if(previousMonth != null) {
-            lastDayOfMonth = LocalDate.parse(previousMonth).minusDays(1);
+            lastDayOfMonth = LocalDate.parse(previousMonth);
             firstDayOfMonth = lastDayOfMonth.with(TemporalAdjusters.firstDayOfMonth());
         }
 

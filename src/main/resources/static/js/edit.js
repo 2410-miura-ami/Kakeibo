@@ -1,10 +1,11 @@
-// 大分類、小分類、商品名の選択肢を配列でそれぞれ用意
+// 収支、大カテゴリ、小カテゴリの選択肢を配列でそれぞれ用意
+//収支
 const categories = [
   {category: '収入', value: '1'},
   {category: '支出', value: '2'}
 ];
 
-// 小分類と商品名は、それぞれ一つ前の選択肢と紐付けるためにオブジェクト型を使う
+//大カテゴリ
 const subCategories = [
   {category: '収入', name: '給与所得', value: '1'},
   {category: '収入', name: 'その他（収入）', value: '2'},
@@ -17,6 +18,7 @@ const subCategories = [
   {category: '支出', name: 'その他（支出）', value: '9'}
 ];
 
+//小カテゴリ
 const products = [
   {subCategory: '給与所得', name: '月給', value: '1'},
   {subCategory: '給与所得', name: '賞与', value: '2'},
@@ -74,96 +76,91 @@ const productSelect = document.getElementById('product-select');
 const defaultCategory = bop;
 const defaultSubCategory = bigCategoryId;
 const defaultProduct = smallCategoryId;
+let defaultCategoryName = '';
 let defaultSubCategoryName = '';
 
-// 大分類のプルダウンを生成
+// 収支のプルダウンを生成
 //繰り返し処理で<option>タグに配列categoriesの値を設定していく
 categories.forEach(category => {
   //optionという変数に<option>タグをセット
   const option = document.createElement('option');
   //<option>タグにテキスト内容 (表示される文字)とvalue属性をセット
   option.textContent = category.category;
-  option.value = category.value
+  option.value = category.value;
+  //label要素は選択された収支と表示する大カテゴリの比較のために設定
+  option.label = category.category;
 
 　//デフォルト値と合致する場合にselected要素（初期表示用）を追加
   if (String(category.value) === String(defaultCategory)) {
       option.selected = true;
-    }
-
+      //デフォルト値と合致するカテゴリ名を変数にセット
+      defaultCategoryName = category.category;
+  }
   //html上の<select>タグのid属性を識別子として、作成した<option>タグを追加
   categorySelect3.appendChild(option);
 });
 
 
-// 小分類のプルダウンの選択肢を全て削除し、選択（クリック）できるようにする
+// 大カテゴリのプルダウンを生成
+//大カテゴリのプルダウンの選択肢を全て削除し、選択（クリック）できるようにする
 optionClear('#sub-category-select-3 > option');
 subCategorySelect3.disabled = false;
 
-// subCategorySelect3 の先頭に追加
+/*①*/
+//subCategorySelect3にfirstOption()関数で作った<option>タグを追加
 subCategorySelect3.appendChild(firstOption());
-// 大分類で選択されたカテゴリーと同じ小分類のみを、プルダウンの選択肢に設定する
+//支出で選択されたカテゴリーと同じ大カテゴリのみを、プルダウンの選択肢に設定する
 subCategories.forEach(subCategory => {
-  if (categorySelect3.value == 1) {
-    if(String(subCategory.category) === '収入'){
-      const option = document.createElement('option');
-      option.textContent = subCategory.name;
-      option.label = subCategory.name;
-      option.value = subCategory.value;
-      subCategorySelect3.appendChild(option);
-      //デフォルト値と合致する場合にselected要素を追加
-          if (String(subCategory.value) === String(defaultSubCategory)) {
-            option.selected = true;
-            defaultSubCategoryName = subCategory.name
-            //document.getElementById('hidden-big-category').value = defaultSubCategory;
-          }
+
+  //選択された<option>タグのvalue要素が1かつ繰り返し処理のsubCategory.categoryが収入のとき
+  if (defaultCategoryName == subCategory.category) {
+    //optionという変数に<option>タグをセット
+    const option = document.createElement('option');
+    //<option>タグにテキスト内容 (表示される文字)とvalue属性をセット
+    option.textContent = subCategory.name;
+    option.value = subCategory.value;
+    //label要素は選択された大カテゴリと表示する小カテゴリの比較のために設定
+    option.label = subCategory.name;
+    //html上の<select>タグのid属性を識別子として、作成した<option>タグを追加
+    subCategorySelect3.appendChild(option);
+
+    //デフォルト値と合致する場合にselected要素（初期表示用）を追加
+    if (subCategory.value == defaultSubCategory) {
+      option.selected = true;
+      //デフォルト値と合致するカテゴリ名を変数にセット
+      defaultSubCategoryName = subCategory.name
     }
   }
-  if (categorySelect3.value == 2) {
-    if(String(subCategory.category) === '支出'){
-      const option = document.createElement('option');
-      option.textContent = subCategory.name;
-      option.label = subCategory.name;
-      option.value = subCategory.value;
-      subCategorySelect3.appendChild(option);
-      //デフォルト値と合致する場合にselected要素を追加
-          if (String(subCategory.value) === String(defaultSubCategory)) {
-            option.selected = true;
-            defaultSubCategoryName = subCategory.name
-            //document.getElementById('hidden-big-category').value = defaultSubCategory;
-          }
-    }
-  }
-  // 大分類が選択されていない（「選択してください」になっている）とき、小分類を選択（クリック）できないようにする
+
+  //支出が選択されていない（「選択してください」になっている）とき、大カテゴリを選択（クリック）できないようにする
+  //選択してください」の<option>タグのvalue属性をhtml上で0に設定しているため、それをチェック
   if (categorySelect3.value == 0) {
     subCategorySelect3.disabled = true;
     return;
   }
-  });
+});
 
-
-
-// 商品のプルダウンの選択肢を全て削除し、選択（クリック）できるようにする
+//小カテゴリのプルダウンを生成
+//小カテゴリのプルダウンの選択肢を全て削除し、選択（クリック）できるようにする
 optionClear('#product-select > option');
 productSelect.disabled = false;
 
-// productSelect の先頭に追加
+/*①の小カテゴリバージョン*/
 productSelect.appendChild(firstOption());
-// 小分類で選択されたカテゴリーと同じ商品のみを、プルダウンの選択肢に設定する
+
 products.forEach(product => {
-  if (String(defaultSubCategoryName) === String(product.subCategory)) {
+  if (defaultSubCategoryName == product.subCategory) {
     const option = document.createElement('option');
     option.textContent = product.name;
     option.value = product.value;
 
-    //デフォルト値と合致する場合にselected要素を追加
-    if (String(product.value) === String(defaultProduct)) {
-        option.selected = true;
-        //document.getElementById('hidden-small-category').value = defaultProduct;
+    if (product.value == defaultProduct) {
+      option.selected = true;
     }
 
     productSelect.appendChild(option);
   }
-  // 小分類が選択されていない（「選択してください」になっている）とき、商品を選択（クリック）できないようにする
+
   if (subCategorySelect3.value == 0) {
     productSelect.disabled = true;
     return;
@@ -171,96 +168,63 @@ products.forEach(product => {
 });
 /* ↑ここから上はプルダウンのデフォルト値設定のための定義↑ */
 
-/* ↓ここから下は通常のプルダウンの動きを定義↓ */
-// 大分類が選択されたら小分類のプルダウンを生成
-categorySelect3.addEventListener('input', () => {
-  const selectedCategory = categorySelect3.value;
-  //document.getElementById('hidden-category').value = selectedCategory;
 
-  // 小分類のプルダウンを「選択してください」のみにし、選択（クリック）できるようにする
+/* ↓ここから下は通常のプルダウンの動きを定義↓ */
+/*(１)*/
+//支出が選択されたら大カテゴリのプルダウンを生成
+categorySelect3.addEventListener('input', () => {
+
+  //大カテゴリのプルダウンを「選択してください」のみにし、選択（クリック）できるようにする
   optionClear('#sub-category-select-3 > option');
   subCategorySelect3.appendChild(firstOption());
   subCategorySelect3.disabled = false;
 
-  // 商品のプルダウンを「選択してください」のみにし、選択（クリック）できないようにする
+  //小カテゴリのプルダウンを「選択してください」のみにし、選択（クリック）できないようにする
   optionClear('#product-select > option');
   productSelect.appendChild(firstOption());
   productSelect.disabled = true;
 
-  // 大分類が選択されていない（「選択してください」になっている）とき、小分類を選択（クリック）できないようにする
+  //支出が選択されていない（「選択してください」になっている）とき、小分類を選択（クリック）できないようにする
   if (categorySelect3.value == 0) {
     subCategorySelect3.disabled = true;
     return;
   }
 
-  // 大分類で選択されたカテゴリーと同じ小分類のみを、プルダウンの選択肢に設定する
+  //収支で選択されたカテゴリーと同じ大カテゴリのみを、プルダウンの選択肢に設定する
   subCategories.forEach(subCategory => {
 
-      if (categorySelect3.value == 1) {
-        if(String(subCategory.category) === '収入'){
+      //selectedOptions[0].labelで選択された<option>タグのlabel要素を取得
+      if (categorySelect3.selectedOptions[0].label == subCategory.category){
           const option = document.createElement('option');
           option.textContent = subCategory.name;
-          option.label = subCategory.name;
           option.value = subCategory.value;
           subCategorySelect3.appendChild(option);
-        }
       }
-      if (categorySelect3.value == 2) {
-        if(String(subCategory.category) === '支出'){
-          const option = document.createElement('option');
-          option.textContent = subCategory.name;
-          option.label = subCategory.name;
-          option.value = subCategory.value;
-          subCategorySelect3.appendChild(option);
-        }
-      }
-
   });
 });
-
-// 小分類が選択されたら商品のプルダウンを生成
+/*(１)の小カテゴリバリデーション*/
+//大カテゴリが選択されたら小カテゴリのプルダウンを生成
 subCategorySelect3.addEventListener('input', () => {
-  subCategories.forEach(subCategory => {
-    if (String(subCategorySelect3.value) === String(subCategory.value)) {
-      //document.getElementById('hidden-big-category').value = subCategory.value;
-      defaultSubCategoryName = subCategory.name;
-    }
 
-
-  //const selectedSubCategory = subCategorySelect3.value;
-  //document.getElementById('hidden-big-category').value = selectedSubCategory;
-
-  // 商品のプルダウンを「選択してください」のみにし、選択（クリック）できるようにする
+  //小カテゴリのプルダウンを「選択してください」のみにし、選択（クリック）できるようにする
   optionClear('#product-select > option');
   productSelect.appendChild(firstOption());
   productSelect.disabled = false;
 
-  // 小分類が選択されていない（「選択してください」になっている）とき、商品を選択（クリック）できないようにする
+  //大カテゴリが選択されていない（「選択してください」になっている）とき、商品を選択（クリック）できないようにする
   if (subCategorySelect3.value == 0) {
     productSelect.disabled = true;
     return;
   }
 
-  // 小分類で選択されたカテゴリーと同じ商品のみを、プルダウンの選択肢に設定する
-    products.forEach(product => {
-      if (String(defaultSubCategoryName) === String(product.subCategory)) {
-        const option = document.createElement('option');
-        option.textContent = product.name;
-        option.value = product.value;
+  //大カテゴリで選択されたカテゴリーと同じ小カテゴリのみを、プルダウンの選択肢に設定する
+  products.forEach(product => {
+    if (subCategorySelect3.selectedOptions[0].label == product.subCategory) {
+      const option = document.createElement('option');
+      option.textContent = product.name;
+      option.value = product.value;
 
-        productSelect.appendChild(option);
-      }
-    });
-
-
-    productSelect.addEventListener('input', () => {
-      products.forEach(product => {
-        if (String(productSelect.value) === String(product.value)) {
-          //document.getElementById('hidden-small-category').value = product.value;
-        }else if(productSelect.value == 0){
-          //document.getElementById('hidden-small-category').value = 0;
-        }
-      });
-    });
-});
+      productSelect.appendChild(option);
+    }
+  });
 });
