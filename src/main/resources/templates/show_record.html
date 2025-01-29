@@ -24,13 +24,14 @@
     </div>
 </header>
 
+<div class="main-contents mx-auto">
 <div class="alert alert-danger" th:each="errorMessage : ${errorMessages}">
     <p th:text="${errorMessage}">
 </div>
 
 <table class="table table-hover">
     <thead>
-    <tr>
+    <tr class="table-secondary">
         <th>日付</th>
         <th>大カテゴリ</th>
         <th>小カテゴリ</th>
@@ -54,5 +55,6 @@
     </tr>
     </tbody>
 </table>
+</div>
 </body>
 </html>
