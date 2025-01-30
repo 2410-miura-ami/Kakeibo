@@ -140,6 +140,8 @@ public class UserController {
         }
         if (userForm.getPassword().isBlank()) {
             errorMessages.add("・パスワードを入力してください");
+        } else if (!userForm.getPassword().matches("^[!-~]{6,20}$")) {
+            errorMessages.add("・パスワードは半角文字かつ6文字以上20文字以下で入力してください");
         }
 
         if(result.hasErrors()) {

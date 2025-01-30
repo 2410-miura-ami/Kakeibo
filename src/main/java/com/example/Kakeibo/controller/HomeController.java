@@ -50,6 +50,7 @@ public class HomeController {
             int reqNum = Integer.parseInt(num);
             calendar.add(Calendar.MONTH, reqNum);
             displayDate  = calendar.getTime();
+            return new ModelAndView("redirect:/");
         }
 
         Date firstDate = getFirstDate(displayDate);
