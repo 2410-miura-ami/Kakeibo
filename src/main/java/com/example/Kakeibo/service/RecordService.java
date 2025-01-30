@@ -163,6 +163,13 @@ public class RecordService {
     }
 
     /*
+     * idを元に記録を削除（記録削除処理）
+     */
+    public void delete(int id){
+        recordRepository.deleteById(id);
+    }
+
+    /*
      * EntityをFormに変換（個別記録画面の表示）
      */
     private List<RecordForm> objectToForm2(List<Object[]> records) {

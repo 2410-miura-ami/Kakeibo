@@ -80,7 +80,7 @@ public class UserController {
         UserForm loginUser = userService.selectLoginUser(email);
         //バリデーション
         //ユーザが存在しないか停止中またはパスワードが違えばエラーメッセージをセット
-        if (loginUser == null  /*|| !BCrypt.checkpw(password, loginUser.getPassword())*/) {
+        if (loginUser == null  || !BCrypt.checkpw(password, loginUser.getPassword())) {
             errorMessages.add("・ログインに失敗しました");
         }
         //エラーメッセージが１つ以上ある場合

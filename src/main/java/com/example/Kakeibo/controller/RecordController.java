@@ -315,4 +315,25 @@ public class RecordController {
             return new ModelAndView("redirect:/");
         }
     }
+
+    /*
+     * 記録削除処理
+     */
+    @GetMapping("/deleteRecord/{id}")
+    public ModelAndView deleteRecord(@PathVariable int id){
+
+        RecordForm recordForm = recordService.select(id);
+        recordService.delete(id);
+
+        String landmark = (String)session.getAttribute("landmark");
+        if(Objects.equals(landmark, "houseHold")){
+            Integer smallCategoryID = recordForm.getSmallCategoryId();
+            return new ModelAndView("redirect:/showRecord?smallCategoryId=" + smallCategoryID);
+        } else if (Objects.equals(landmark, "history")) {
+            String date = recordForm.getDate();
+            return new ModelAndView("redirect:/showRecord?date=" + date);
+        }else {
+            return new ModelAndView("redirect:/");
+        }
+    }
 }
