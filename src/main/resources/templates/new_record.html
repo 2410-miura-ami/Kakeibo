@@ -15,14 +15,14 @@
     <a th:href="@{/}" class="home-logo">
         <h1>Kakeibo</h1>
     </a>
-    <form th:action="@{/logout}" method="get">
-        <button type="submit" class="btn btn-outline-secondary me-3">ログアウト</button>
+    <form th:action="@{/}">
+        <input type="submit" value="戻る" class="btn btn-outline-secondary me-3" />
     </form>
 </header>
 
 <div class="contents mx-auto">
     <div class="header-contents">
-        <h2 class="text-center my-3">新規記録</h2>
+        <h2 class="text-center my-3">新規記録登録</h2>
     </div>
     <div class="alert alert-danger" th:each="errorMessage : ${errorMessages}">
         <p th:text="${errorMessage}"></p>
@@ -96,13 +96,6 @@
         </table>
         <input type="submit" value="追加" class="btn btn-primary d-grid gap-2 col-12 mx-auto" />
     </form>
-</div>
-<div class="back-contents mx-auto">
-    <div class="footer-contents">
-        <form th:action="@{/}">
-            <input type="submit" value="戻る" class="btn btn-secondary btn-sm mb-5" />
-        </form>
-    </div>
 </div>
 </body>
 <script th:src="@{/js/select.js}"></script>
