@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Title</title>
+    <title>記録編集</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <meta charset="UTF-8">
@@ -26,62 +26,78 @@
     </div>
 </header>
 
-<div class="header-contents">
-    <h2 class="text-center my-3">記録編集</h2>
-</div>
-
-<div class="main-contents mx-auto">
-
+<div class="contents mx-auto">
+    <div class="header-contents">
+        <h2 class="text-center my-3">記録編集</h2>
+    </div>
     <div class="alert alert-danger" th:each="errorMessage : ${errorMessages}">
         <p th:text="${errorMessage}"></p>
     </div>
-    <form th:method="put" th:action="@{/updateRecord}" class="text-center" >
+    <form th:method="put" th:action="@{/updateRecord}" class="form-group form-group-lg text-center pad20" >
         <script th:inline="javascript">
             const bop = /*[[${record.bop}]]*/ 'bop';
             const bigCategoryId = /*[[${record.bigCategoryId}]]*/ 'bigCategoryId';
             const smallCategoryId = /*[[${record.smallCategoryId}]]*/ 'smallCategoryId';
         </script>
-        <div class="input-block">
+        <table class="table">
             <input type="hidden" name="id" th:value="${record.id}" />
             <input type="hidden" name="userId" th:value="${record.userId}" />
-            <div class="select-block">
-                <label>日付:
-                    <input type="date" name="date" th:value="${record.date}">
-                </label>
-            </div>
-            <div class="select-block">
-                <label>収支：
-                    <select id="category-select-3" name="bop">
-                        <option value="0">選択してください</option>
-                    </select>
-                </label>
-            </div>
-            <div class="select-block">
-                <label>大カテゴリー：
-                    <select id="sub-category-select-3" name="bigCategoryId" disabled>
-                        <option>選択してください</option>
-                    </select>
-                </label>
-            </div>
-            <div class="select-block">
-                <label>小カテゴリー：
-                    <select id="product-select" name="smallCategoryId" disabled>
-                        <option>選択してください</option>
-                    </select>
-                </label>
-            </div>
-            <div class="select-block">
-                <label>金額：
-                    <input type="number" name="amount" step="1" min="0" th:value="${record.amount}" required>
-                </label>
-            </div>
-            <div class="select-block">
-                <label>メモ：
-                    <input type="text" name="memo" max="50" th:value="${record.memo}">
-                </label>
-            </div>
-        </div>
-        <input type="submit" value="変更" class="btn btn-primary update-button" />
+            <tr>
+                <th class="form-label">日付</th>
+                <td>
+                    <div class="select-block">
+                        <input class="form-control" type="date" name="date" th:value="${record.date}">
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>収支</th>
+                <td>
+                    <div class="select-block">
+                        <select id="category-select-3" class="form-control h-auto" name="bop">
+                            <option value="0">選択してください</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>大カテゴリー</th>
+                <td>
+                    <div class="select-block">
+                        <select id="sub-category-select-3" class="form-control h-auto" name="bigCategoryId" disabled>
+                            <option>選択してください</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>小カテゴリー</th>
+                <td>
+                    <div class="select-block" >
+                        <select id="product-select" class="form-control h-auto" name="smallCategoryId"  disabled>
+                            <option>選択してください</option>
+                        </select>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>金額</th>
+                <td>
+                    <div class="select-block">
+                        <input class="form-control" type="number" name="amount" step="1" min="0" th:value="${record.amount}" required>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <th>メモ</th>
+                <td>
+                    <div class="select-block">
+                        <input class="form-control" type="text" name="memo" max="50" th:value="${record.memo}">
+                    </div>
+                </td>
+            </tr>
+        </table>
+        <input type="submit" value="変更" class="btn btn-primary d-grid gap-2 col-12 mx-auto" />
     </form>
 </div>
 </body>

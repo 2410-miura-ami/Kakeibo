@@ -26,17 +26,16 @@
     </header>
 
     <div class="history">
-        <a th:href="@{/history}" class="btn btn-outline-secondary mx-auto"><i class="bi bi-calendar-check"></i> 履歴</a>
+        <a th:href="@{/history}" class="btn btn-outline-secondary ms-4 my-3"><i class="bi bi-calendar-check"></i> 履歴</a>
     </div>
-
-    <form th:action="@{/newRecord}">
-        <input type="submit" value="新規登録" class="btn btn-secondary newUser-button"/>
-    </form>
+    <a th:href="@{/newRecord}" class="btn btn-outline-secondary ms-4 mb-5"><i class="bi bi-pencil-fill"> 新規登録</i></a>
     <div class="main-contents mx-auto">
-        <div class="bar-chart ">
-            <h4 class="d-grid gap-2 col-6 mx-auto displayCenter">月別収支額</h4>
-            <a th:href="@{/(num = -1)}" class="float-start">&lt;前月へ</a>
-            <a th:href="@{/(num = 1)}" class="float-end">翌月へ&gt;</a>
+        <div class="display-date">
+            <a th:href="@{/(num = -1)}" class="btn btn-outline-secondary float-left">前月</a>
+            <h4 th:text="月別収支額"></h4>
+            <a th:href="@{/(num = 1)}" class="btn btn-outline-secondary float-right">翌月</a>
+        </div>
+        <div class="bar-chart">
             <div class="container" style="width:60%">
                 <canvas id="canvas"></canvas>
             </div>

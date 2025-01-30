@@ -64,6 +64,11 @@ public class RecordController {
 
         List<BigSmallCategoryForm> results = new ArrayList<>();
 
+        //【追加】編集するidチェックのエラーメッセージを取得
+        List<String> ErrorMessages = (List<String>)session.getAttribute("errorMessages");
+        mav.addObject("errorMessages", ErrorMessages);
+        session.removeAttribute("errorMessages");
+
         //【追加】
         //大カテゴリIDをセッションから取得
         Integer bigCategoryId = (Integer)session.getAttribute("bigCategoryId");
@@ -116,6 +121,8 @@ public class RecordController {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             try {
                 LocalDate.parse(date, formatter);
+                //三浦追加sessionにdateをセット
+                session.setAttribute("date", date);
                 //LocalDate型への変換が失敗した場合、エラーメッセージを表示
             } catch (DateTimeParseException e) {
                 errorMessages.add("・不正なパラメータが入力されました");
@@ -181,10 +188,8 @@ public class RecordController {
      * 記録編集画面表示
      */
     @GetMapping("/editRecord/{id}")
-    public ModelAndView getEditRecord(@PathVariable Integer id, Model model){
+    public ModelAndView getEditRecord(@PathVariable String id, Model model){
         ModelAndView mav = new ModelAndView();
-
-        RecordForm result = recordService.select(id);
 
         //セッションから遷移元画面の識別子を取得
         String landmark = (String)session.getAttribute("landmark");
@@ -192,6 +197,44 @@ public class RecordController {
         if(Objects.equals(landmark, "houseHold")){
             Integer smallCategoryId = (Integer)session.getAttribute("smallCategoryId");
             mav.addObject("smallCategoryId", smallCategoryId);
+        }
+
+        //バリデーション追加
+        //編集する記録IDのチェック
+        List<String> ErrorMessages = new ArrayList<>();
+        if (id == null || !id.matches("^[0-9]+$")) {
+            ErrorMessages.add("・不正なパラメータが入力されました");
+            session.setAttribute("errorMessages", ErrorMessages);
+
+            if(Objects.equals(landmark, "houseHold")){
+                Integer smallCategoryId = (Integer)session.getAttribute("smallCategoryId");
+                return new ModelAndView("redirect:/showRecord?smallCategoryId=" + smallCategoryId);
+            } else if (Objects.equals(landmark, "history")) {
+                String date = (String) session.getAttribute("date");
+                return new ModelAndView("redirect:/showRecord?date=" + date);
+            } else {
+                return new ModelAndView("redirect:/");
+            }
+
+        }
+
+        int recordId = Integer.parseInt(id);
+
+        RecordForm result = recordService.select(recordId);
+
+        //編集する記録IDの存在チェック
+        if (result == null) {
+            ErrorMessages.add("・不正なパラメータが入力されました");
+            session.setAttribute("errorMessages", ErrorMessages);
+            if(Objects.equals(landmark, "houseHold")){
+                Integer smallCategoryId = (Integer)session.getAttribute("smallCategoryId");
+                return new ModelAndView("redirect:/showRecord?smallCategoryId=" + smallCategoryId);
+            } else if (Objects.equals(landmark, "history")) {
+                String date = (String) session.getAttribute("date");
+                return new ModelAndView("redirect:/showRecord?date=" + date);
+            } else {
+                return new ModelAndView("redirect:/");
+            }
         }
 
         List<String> errorMessages = (List<String>)model.getAttribute("errorMessages");
@@ -242,6 +285,31 @@ public class RecordController {
             return new ModelAndView("redirect:/showRecord?smallCategoryId=" + smallCategoryID);
         } else if (Objects.equals(landmark, "history")) {
             String date = recordForm.getDate();
+            return new ModelAndView("redirect:/showRecord?date=" + date);
+        }else {
+            return new ModelAndView("redirect:/");
+        }
+    }
+
+    /*
+     * 編集する記録Idが空白の時
+     *個別記録編集画面
+     */
+    @GetMapping("/editRecord/")
+    public ModelAndView editRecordInvalid() {
+        ModelAndView mav = new ModelAndView();
+
+        List<String> errorMessages = new ArrayList<>();
+        errorMessages.add("・不正なパラメータが入力されました");
+        session.setAttribute("errorMessages", errorMessages);
+
+        //セッションから遷移元画面の識別子を取得
+        String landmark = (String)session.getAttribute("landmark");
+        if(Objects.equals(landmark, "houseHold")){
+            Integer smallCategoryId = (Integer)session.getAttribute("smallCategoryId");
+            return new ModelAndView("redirect:/showRecord?smallCategoryId=" + smallCategoryId);
+        } else if (Objects.equals(landmark, "history")) {
+            String date = (String) session.getAttribute("date");
             return new ModelAndView("redirect:/showRecord?date=" + date);
         }else {
             return new ModelAndView("redirect:/");

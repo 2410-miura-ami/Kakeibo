@@ -16,8 +16,8 @@
     <a th:href="@{/}" class="home-logo">
         <h1>Kakeibo</h1>
     </a>
-    <form th:action="@{/logout}" method="get">
-        <button type="submit" class="btn btn-outline-secondary me-3">ログアウト</button>
+    <form th:action="@{/}" method="get">
+        <button type="submit" class="btn btn-outline-secondary me-3">戻る</button>
     </form>
 </header>
 
@@ -121,11 +121,6 @@
                 </div>
             </tbody>
         </table>
-    </div>
-    <div class="footer">
-        <form th:action="@{/}">
-            <input type="submit" value="戻る" class="btn btn-secondary btn-sm" />
-        </form>
     </div>
 
 </div>
