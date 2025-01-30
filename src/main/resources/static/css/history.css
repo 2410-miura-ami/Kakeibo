@@ -18,7 +18,7 @@ td {
     vertical-align: top;
     font-size: 20px;
     height: 250px;
-    min-width: 250px;
+    min-width: 200px;
 }
 
 td:first-child {
