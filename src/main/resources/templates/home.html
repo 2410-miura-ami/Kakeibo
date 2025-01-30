@@ -31,9 +31,9 @@
     <a th:href="@{/newRecord}" class="btn btn-outline-secondary ms-4 mb-5"><i class="bi bi-pencil-fill"> 新規登録</i></a>
     <div class="main-contents mx-auto">
         <div class="display-date">
-            <a th:href="@{/(num = -1)}" class="btn btn-outline-secondary float-left">&lt;前月へ</a>
+            <a th:href="@{/(num = -1)}" class="btn btn-outline-secondary float-left">前月</a>
             <h4 th:text="月別収支額"></h4>
-            <a th:href="@{/(num = 1)}" class="btn btn-outline-secondary float-right">翌月へ&gt;</a>
+            <a th:href="@{/(num = 1)}" class="btn btn-outline-secondary float-right">翌月</a>
         </div>
         <div class="bar-chart">
             <div class="container" style="width:60%">
