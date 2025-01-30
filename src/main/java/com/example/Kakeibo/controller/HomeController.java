@@ -42,6 +42,7 @@ public class HomeController {
         Integer loginId = loginUser.getId();
         mav.addObject("loginUser", loginUser);
 
+        
         //【追加】編集するidチェックのエラーメッセージを取得
         List<String> ErrorMessages = (List<String>)session.getAttribute("errorMessages");
         mav.addObject("errorMessages", ErrorMessages);
